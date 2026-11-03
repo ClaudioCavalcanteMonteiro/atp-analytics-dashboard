@@ -389,7 +389,7 @@ table **MEDIDAS**
 			
 			VAR PctR = [% Vitórias vs Destros]
 			VAR PctL = [% Vitórias vs Canhotos]
-			VAR Pct3 = [% Vitórias em 3 Sets]
+			VAR Pct3 = [% Vitórias em Sets Decisivos]
 			
 			VAR LinhaR =
 			    SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Linha,
@@ -407,10 +407,10 @@ table **MEDIDAS**
 			
 			VAR Linha3 =
 			    SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Linha,
-			        "%ROTULO%", "Em 3 sets" ),
+			        "%ROTULO%", "Set decisivo" ),
 			        "%LARG%", SUBSTITUTE ( FORMAT ( Pct3 * 100, "0.0" ), ",", "." ) ),
 			        "%PCT%", IF ( ISBLANK ( Pct3 ), "—", FORMAT ( Pct3, "0.0%" ) ) ),
-			        "%CTX%", [Vitórias em 3 Sets] + 0 & "V – " & [Derrotas em 3 Sets] + 0 & "D" )
+			        "%CTX%", [Vitórias em Sets Decisivos] + 0 & "V – " & [Derrotas em Sets Decisivos] + 0 & "D" )
 			
 			-- ===== Duração =====
 			VAR DurJ = [Duração Média (min)]
@@ -441,23 +441,23 @@ table **MEDIDAS**
 		displayFolder: 6.Cartoes HTML
 		lineageTag: 054db2f6-b9e1-437f-a3a7-a8504e83d979
 
-	measure 'Vitórias em 3 Sets' =
+	measure 'Vitórias em Sets Decisivos' =
 			
-			CALCULATE ( [1.Vitorias], d_PerfilPartida[tipo_termino] = "Normal", d_PerfilPartida[num_sets] = 3 )
+			CALCULATE ( [1.Vitorias], f_Resultados_Gold[set_decisivo] = TRUE () )
 		formatString: 0
 		displayFolder: 3. Estatisticas Jogador
 		lineageTag: 9c1e6718-bebc-47bf-931c-3ebb980945ff
 
-	measure 'Derrotas em 3 Sets' =
+	measure 'Derrotas em Sets Decisivos' =
 			
-			CALCULATE ( [2.Derrotas], d_PerfilPartida[tipo_termino] = "Normal", d_PerfilPartida[num_sets] = 3 )
+			CALCULATE ( [2.Derrotas], f_Resultados_Gold[set_decisivo] = TRUE () )
 		formatString: 0
 		displayFolder: 3. Estatisticas Jogador
 		lineageTag: 59503ec2-520f-4169-8d2f-3f1ef854494c
 
-	measure '% Vitórias em 3 Sets' =
+	measure '% Vitórias em Sets Decisivos' =
 			
-			DIVIDE ( [Vitórias em 3 Sets], [Vitórias em 3 Sets] + [Derrotas em 3 Sets] )
+			DIVIDE ( [Vitórias em Sets Decisivos], [Vitórias em Sets Decisivos] + [Derrotas em Sets Decisivos] )
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: 3. Estatisticas Jogador
 		lineageTag: 7a28af96-c219-4bce-9eea-2e3017165eca

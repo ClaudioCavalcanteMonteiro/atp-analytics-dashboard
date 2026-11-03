@@ -60,7 +60,7 @@
             "italic": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -142,5 +142,23 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "108cecede07903c89a20",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "**MEDIDAS**"
+              }
+            },
+            "Property": "Perfil Jogador"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

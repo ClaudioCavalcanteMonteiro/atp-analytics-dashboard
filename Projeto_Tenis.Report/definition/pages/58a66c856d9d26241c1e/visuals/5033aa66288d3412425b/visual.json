@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5033aa66288d3412425b",
   "position": {
-    "x": 6,
-    "y": 107,
+    "x": 5.5555555555555554,
+    "y": 106.66666666666666,
     "z": 2000,
-    "height": 949,
-    "width": 431
+    "height": 950,
+    "width": 432.22222222222223
   },
   "visual": {
     "visualType": "advancedSlicerVisual",
@@ -66,7 +66,7 @@
                           [
                             {
                               "Literal": {
-                                "Value": "'#25 Karen Khachanov'"
+                                "Value": "'#1 Jannik Sinner'"
                               }
                             }
                           ]

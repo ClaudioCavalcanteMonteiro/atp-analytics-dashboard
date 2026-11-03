@@ -87,7 +87,7 @@ All cleaning happens in the Silver layer, in this order:
     - `Def.` standardized to `DEF` in the score.
 6. **Impossible values:** match durations above 300 minutes set to `null` (two best-of-3 matches recorded at 987 and 1,146 minutes).
 7. **Walkovers:** W.O. matches (190) have their duration and every serve statistic set to `null`, since the match was never played.
-8. **Match profile:** derived from the score — how the match ended (normal, retirement, walkover, default), number of sets played and number of tie-breaks.
+8. **Match profile:** derived from the score — how the match ended (normal, retirement, walkover, default), number of sets played and number of tie-breaks. In the Gold layer, a `set_decisivo` flag marks matches that went to the last possible set.
 9. **Column names** translated to Portuguese in `snake_case` (e.g. `w_1stWon` → `pontos_ganhos_primeiro_saque_vencedor`).
 10. **Data types:** applied at the end with a safe-typing function (`fxTipoSeguro`). The date is converted from `yyyyMMdd`, and age is read with the `en-US` culture so that `25.5` is not read as `255` under the `pt-BR` locale.
 
@@ -97,7 +97,7 @@ Star schema with one fact table (one row per match) and its dimensions.
 
 | Table | Type | Grain / content |
 |---|---|---|
-| `f_Resultados_Gold` | Fact | One row per match: keys, score, duration, both players' rank/age/seed/entry/hand at match time and 18 serve statistics. |
+| `f_Resultados_Gold` | Fact | One row per match: keys, score, duration, best-of format, deciding-set flag, both players' rank/age/seed/entry/hand at match time and 18 serve statistics. |
 | `d_Jogadores` | Dimension | One row per player: name, hand, height, country, country name and flag. |
 | `d_Torneios` | Dimension | One row per tournament edition: name and surface. |
 | `d_Calendario` | Dimension | Date table, 2014 to the current year. |
@@ -131,7 +131,7 @@ The model has 64 measures. The main definitions:
 | **Titles / Finals** | Wins in the final round / finals played. |
 | **Win % vs. top 10** | Win % against opponents ranked in the top 10 **on the match date**. |
 | **Win % vs. right/left-handers** | Win % by the opponent's playing hand. |
-| **Win % in 3-set matches** | Matches that ended normally after exactly three sets. |
+| **Win % in deciding sets** | Matches that ended normally in the last possible set: the 3rd set in best-of-3 and the 5th set in best-of-5. |
 | **1st serve %** | First serves in ÷ service points played. |
 | **1st / 2nd serve points won %** | Points won on 1st serve ÷ first serves in; points won on 2nd serve ÷ (service points − first serves in). |
 | **Service points won %** | (1st + 2nd serve points won) ÷ service points played. |
@@ -153,7 +153,7 @@ The page follows a Z reading pattern and the principles of *Storytelling with Da
 | **Player panel** (left) | A grid with the top 100 headshots, ordered by ranking. Clicking a photo selects the player. |
 | **Header** | Name, flag, country, hand, height and age, plus KPIs: current ranking (and best), points, win % with record, titles out of finals, and win % against the top 10. |
 | **Performance by surface** | Three clickable isometric courts (hard, clay, grass). Clicking one filters the whole page by surface. |
-| **Game in numbers** | Aces and double faults per match vs. the circuit, win % against right- and left-handers and in 3-set matches, and average match duration. |
+| **Game in numbers** | Aces and double faults per match vs. the circuit, win % against right- and left-handers and in deciding-set matches, and average match duration. |
 | **Serve and return profile** | SVG radar with six indicators for the player and the circuit average, plus how many indicators are above average. |
 | **Season trajectory** | Columns for each season and a line for the career-to-date value, with a selector: wins, win %, service points won % and aces per match. The title names the best season automatically. |
 
@@ -200,8 +200,7 @@ The page follows a Z reading pattern and the principles of *Storytelling with Da
 - **Two reference dates:** match-based metrics run until May 2026, while the current ranking and points are from October 20, 2026.
 - **Ranking in the match data** is the player's ranking on the tournament start date, not an end-of-season ranking.
 - **Missing statistics:** 136 played matches have no serve statistics in the source; they are left out of serve metrics through the "matches with statistics" denominator.
-- **3-set matches include Grand Slam straight-set matches:** in best-of-5 matches, three sets means a straight-set result, not a deciding set.
-- **Small samples:** splits such as left-handed opponents or 3-set matches can rely on few matches; the win-loss record is always shown next to the percentage.
+- **Small samples:** splits such as left-handed opponents or deciding sets can rely on few matches; the win-loss record is always shown next to the percentage.
 - **Top 100 table is manual** and needs to be updated by hand when the ranking changes.
 - **Toby Samuel** (no. 96) has no tour-level matches in the data and does not appear in the selector.
 - **Russian and Belarusian players** compete as neutral athletes on the ATP Tour; the data still records their country codes.

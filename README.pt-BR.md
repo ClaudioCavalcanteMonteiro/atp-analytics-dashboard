@@ -87,7 +87,7 @@ Toda a limpeza é feita na camada Silver, nesta ordem:
     - `Def.` padronizado para `DEF` no placar.
 6. **Valores impossíveis:** durações acima de 300 minutos convertidas em `null` (duas partidas em melhor de 3 registradas com 987 e 1.146 minutos).
 7. **W.O.:** as partidas com W.O. (190) ficam sem duração e sem estatísticas de saque, já que não foram disputadas.
-8. **Perfil da partida:** derivado do placar — forma de término (normal, abandono, W.O., desclassificação), número de sets disputados e número de tie-breaks.
+8. **Perfil da partida:** derivado do placar — forma de término (normal, abandono, W.O., desclassificação), número de sets disputados e número de tie-breaks. Na camada Gold, a coluna `set_decisivo` marca as partidas que foram até o último set possível.
 9. **Nomes das colunas** traduzidos para português em `snake_case` (por exemplo, `w_1stWon` → `pontos_ganhos_primeiro_saque_vencedor`).
 10. **Tipagem:** aplicada no final com uma função de tipagem segura (`fxTipoSeguro`). A data é convertida do formato `yyyyMMdd`, e a idade é lida com a cultura `en-US`, para que `25.5` não vire `255` na localidade `pt-BR`.
 
@@ -97,7 +97,7 @@ Modelo em estrela, com uma tabela fato (uma linha por partida) e as dimensões.
 
 | Tabela | Tipo | Granularidade / conteúdo |
 |---|---|---|
-| `f_Resultados_Gold` | Fato | Uma linha por partida: chaves, placar, duração, ranking/idade/cabeça de chave/entrada/mão dos dois jogadores na data da partida e 18 estatísticas de saque. |
+| `f_Resultados_Gold` | Fato | Uma linha por partida: chaves, placar, duração, formato (melhor de 3 ou 5), indicador de set decisivo, ranking/idade/cabeça de chave/entrada/mão dos dois jogadores na data da partida e 18 estatísticas de saque. |
 | `d_Jogadores` | Dimensão | Uma linha por jogador: nome, mão, altura, país, nome do país e bandeira. |
 | `d_Torneios` | Dimensão | Uma linha por edição de torneio: nome e superfície. |
 | `d_Calendario` | Dimensão | Tabela de datas, de 2014 até o ano atual. |
@@ -131,7 +131,7 @@ O modelo tem 64 medidas. As principais definições:
 | **Títulos / Finais** | Vitórias em finais / finais disputadas. |
 | **% de vitórias contra top 10** | % de vitórias contra adversários que estavam no top 10 **na data da partida**. |
 | **% de vitórias contra destros / canhotos** | % de vitórias de acordo com a mão do adversário. |
-| **% de vitórias em 3 sets** | Partidas terminadas normalmente após exatamente três sets. |
+| **% de vitórias em sets decisivos** | Partidas terminadas normalmente no último set possível: o 3º set em melhor de 3 e o 5º set em melhor de 5. |
 | **% de 1º saque** | Primeiros saques dentro ÷ pontos disputados no saque. |
 | **% de pontos ganhos com o 1º / 2º saque** | Pontos ganhos com o 1º saque ÷ primeiros saques dentro; pontos ganhos com o 2º saque ÷ (pontos disputados no saque − primeiros saques dentro). |
 | **% de pontos ganhos no saque** | (Pontos ganhos com o 1º + 2º saque) ÷ pontos disputados no saque. |
@@ -153,7 +153,7 @@ A página segue a leitura em Z e os princípios do *Storytelling com Dados*: uma
 | **Painel de jogadores** (esquerda) | Grade com as fotos do top 100, em ordem de ranking. Clicar numa foto seleciona o jogador. |
 | **Cabeçalho** | Nome, bandeira, país, mão, altura e idade, além dos KPIs: ranking atual (e o melhor), pontos, % de vitórias com o retrospecto, títulos sobre finais e % de vitórias contra top 10. |
 | **Desempenho por superfície** | Três quadras isométricas clicáveis (dura, saibro e grama). Clicar numa delas filtra a página inteira pela superfície. |
-| **Jogo em números** | Aces e duplas faltas por partida comparados ao circuito, % de vitórias contra destros, contra canhotos e em partidas de 3 sets, e duração média das partidas. |
+| **Jogo em números** | Aces e duplas faltas por partida comparados ao circuito, % de vitórias contra destros, contra canhotos e em sets decisivos, e duração média das partidas. |
 | **Perfil de saque e devolução** | Radar em SVG com seis indicadores do jogador e a média do circuito, além de quantos indicadores estão acima da média. |
 | **Trajetória por temporada** | Colunas com o valor de cada temporada e linha com o valor acumulado da carreira, com seletor: vitórias, % de vitórias, % de pontos ganhos no saque e aces por partida. O título indica a melhor temporada automaticamente. |
 
@@ -200,8 +200,7 @@ A página segue a leitura em Z e os princípios do *Storytelling com Dados*: uma
 - **Duas datas de referência:** as métricas de partidas vão até maio de 2026, e o ranking e os pontos atuais são de 20 de outubro de 2026.
 - **O ranking nas partidas** é o ranking do jogador na data de início do torneio, e não o ranking de fim de temporada.
 - **Estatísticas ausentes:** 136 partidas disputadas não têm estatísticas de saque na fonte; elas ficam fora das métricas de saque pelo denominador "partidas com estatística".
-- **Partidas em 3 sets incluem vitórias diretas em Grand Slams:** nas partidas em melhor de 5, três sets significa vitória sem perder set, e não um set decisivo.
-- **Amostras pequenas:** recortes como adversários canhotos ou partidas em 3 sets podem ter poucas partidas; o retrospecto de vitórias e derrotas sempre aparece ao lado do percentual.
+- **Amostras pequenas:** recortes como adversários canhotos ou sets decisivos podem ter poucas partidas; o retrospecto de vitórias e derrotas sempre aparece ao lado do percentual.
 - **A tabela do top 100 é manual** e precisa ser atualizada à mão quando o ranking mudar.
 - **Toby Samuel** (96º) não tem partidas do circuito principal na base e não aparece no seletor.
 - **Jogadores russos e bielorrussos** competem como atletas neutros no circuito ATP; a base ainda registra o código do país.

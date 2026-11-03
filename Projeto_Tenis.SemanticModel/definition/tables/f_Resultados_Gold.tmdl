@@ -347,6 +347,24 @@ table f_Resultados_Gold
 
 		annotation SummarizationSetBy = Automatic
 
+	column melhor_de
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a46d551-fb9a-479c-aab8-a9f678c394b2
+		summarizeBy: sum
+		sourceColumn: melhor_de
+
+		annotation SummarizationSetBy = Automatic
+
+	column set_decisivo
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c8d2917c-5f56-4bf6-98af-ea53f32ed516
+		summarizeBy: none
+		sourceColumn: set_decisivo
+
+		annotation SummarizationSetBy = Automatic
+
 	partition f_Resultados_Gold = m
 		mode: import
 		queryGroup: Gold
@@ -362,14 +380,22 @@ table f_Resultados_Gold
 				        type text
 				    ),
 				
-				    // 2. Manter apenas chaves, atributos da partida e métricas
+				    // 2. Partida decidida no último set possível (3º em melhor de 3, 5º em melhor de 5)
+				    #"Set decisivo" = Table.AddColumn(
+				        #"Id partida",
+				        "set_decisivo",
+				        each [tipo_termino] = "Normal" and [num_sets] = [melhor_de],
+				        type logical
+				    ),
+				
+				    // 3. Manter apenas chaves, atributos da partida e métricas
 				    ColunasFato = {
 				        // Chaves
 				        "id_partida", "id_torneio", "data_torneio", "rodada", "id_perfil_partida",
 				        "id_vencedor", "id_perdedor",
 				
 				        // Partida
-				        "placar", "minutos",
+				        "placar", "minutos", "melhor_de", "set_decisivo",
 				
 				        // Contexto do vencedor na partida
 				        "idade_vencedor", "ranking_vencedor", "pontos_ranking_vencedor",
@@ -391,22 +417,24 @@ table f_Resultados_Gold
 				        "pontos_ganhos_segundo_saque_perdedor", "games_saque_perdedor",
 				        "break_points_salvos_perdedor", "break_points_enfrentados_perdedor"
 				    },
-				    #"Colunas da fato" = Table.SelectColumns(#"Id partida", ColunasFato),
+				    #"Colunas da fato" = Table.SelectColumns(#"Set decisivo", ColunasFato),
 				
-				    // 3. Tipagem final explícita
+				    // 4. Tipagem final explícita
 				    ColunasTexto = {
 				        "id_partida", "id_torneio", "rodada", "id_perfil_partida", "placar",
 				        "entrada_vencedor", "entrada_perdedor", "mao_vencedor", "mao_perdedor"
 				    },
 				    ColunasDecimal = {"idade_vencedor", "idade_perdedor"},
-				    ColunasData = {"data_torneio"},
-				    ColunasInteiro = List.Difference(ColunasFato, ColunasTexto & ColunasDecimal & ColunasData),
+				    ColunasData    = {"data_torneio"},
+				    ColunasLogico  = {"set_decisivo"},
+				    ColunasInteiro = List.Difference(ColunasFato, ColunasTexto & ColunasDecimal & ColunasData & ColunasLogico),
 				
 				    Tipos =
 				        List.Transform(ColunasTexto,   each {_, type text})
 				        & List.Transform(ColunasInteiro, each {_, Int64.Type})
 				        & List.Transform(ColunasDecimal, each {_, type number})
-				        & List.Transform(ColunasData,    each {_, type date}),
+				        & List.Transform(ColunasData,    each {_, type date})
+				        & List.Transform(ColunasLogico,  each {_, type logical}),
 				
 				    #"Tipos ajustados" = Table.TransformColumnTypes(#"Colunas da fato", Tipos)
 				in
