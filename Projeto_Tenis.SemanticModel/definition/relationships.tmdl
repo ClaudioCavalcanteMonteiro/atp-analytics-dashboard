@@ -1,0 +1,31 @@
+relationship AutoDetected_45a834b9-9632-465b-964c-6aefed77b05d
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: d_Top100.id_jogador
+	toColumn: d_Jogadores.id_jogador
+
+relationship AutoDetected_31d5db13-a58c-4445-8d01-4bfe30b08749
+	fromColumn: f_Resultados_Gold.id_torneio
+	toColumn: d_Torneios.id_torneio
+
+relationship AutoDetected_9c0c095b-58b5-4c70-9f65-f1fa4faafcf2
+	fromColumn: f_Resultados_Gold.rodada
+	toColumn: d_Rodada.rodada
+
+relationship AutoDetected_e60211c5-c3b7-4747-bf1a-bf7ca947e49b
+	fromColumn: f_Resultados_Gold.id_perfil_partida
+	toColumn: d_PerfilPartida.id_perfil_partida
+
+relationship 9433349b-d27c-9d47-6d5d-09285f5df161
+	isActive: false
+	fromColumn: f_Resultados_Gold.id_perdedor
+	toColumn: d_Jogadores.id_jogador
+
+relationship ac8e59b0-6ff7-41ad-222b-b237e0db7d9e
+	fromColumn: f_Resultados_Gold.id_vencedor
+	toColumn: d_Jogadores.id_jogador
+
+relationship ed4a7355-1f5d-955b-1bb8-7bfcca142270
+	fromColumn: f_Resultados_Gold.data_torneio
+	toColumn: d_Calendario.Data
+

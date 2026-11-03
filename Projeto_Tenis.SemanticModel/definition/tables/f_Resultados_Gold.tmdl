@@ -1,0 +1,418 @@
+table f_Resultados_Gold
+	lineageTag: 11f99604-23cd-41c3-b48b-e84de3bdb849
+
+	column id_partida
+		dataType: string
+		lineageTag: dba7802a-afcc-4948-956a-f613622055ee
+		summarizeBy: none
+		sourceColumn: id_partida
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_torneio
+		dataType: string
+		lineageTag: 0cd747d5-403a-46ca-8f41-fc9a4bc07e8b
+		summarizeBy: none
+		sourceColumn: id_torneio
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_torneio
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0754e5d2-4384-4582-821d-450dd73be0d8
+		summarizeBy: none
+		sourceColumn: data_torneio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column rodada
+		dataType: string
+		lineageTag: 4acd786d-1f9d-4b88-936b-d65a9f372279
+		summarizeBy: none
+		sourceColumn: rodada
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_perfil_partida
+		dataType: string
+		lineageTag: c4ee6cd1-aaa4-4677-bafb-581f2357bae8
+		summarizeBy: none
+		sourceColumn: id_perfil_partida
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 0115ad44-5ee3-49cd-86d3-d81ef41fb373
+		summarizeBy: none
+		sourceColumn: id_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column id_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 86bba106-d0fe-4d25-83bf-88b14dd19cdf
+		summarizeBy: none
+		sourceColumn: id_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column placar
+		dataType: string
+		lineageTag: bebc1560-1505-4430-a02d-83673f22f90f
+		summarizeBy: none
+		sourceColumn: placar
+
+		annotation SummarizationSetBy = Automatic
+
+	column minutos
+		dataType: int64
+		formatString: 0
+		lineageTag: e6f3161f-9bf6-4d26-8981-e4e512d926de
+		summarizeBy: none
+		sourceColumn: minutos
+
+		annotation SummarizationSetBy = User
+
+	column idade_vencedor
+		dataType: double
+		lineageTag: 459cbaa5-91b7-463f-91a2-7dfb3d54a4a6
+		summarizeBy: none
+		sourceColumn: idade_vencedor
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ranking_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 472bea6f-a048-4908-8e3c-d8703c9acfac
+		summarizeBy: none
+		sourceColumn: ranking_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ranking_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ef45a44-46d1-451f-87a9-33b5c60585b0
+		summarizeBy: none
+		sourceColumn: pontos_ranking_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column cabeca_chave_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ec07e8a-da94-4be5-a54d-a0c0deb6265a
+		summarizeBy: none
+		sourceColumn: cabeca_chave_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column entrada_vencedor
+		dataType: string
+		lineageTag: b08a9d1b-74ea-48df-bbff-bfd885f772bd
+		summarizeBy: none
+		sourceColumn: entrada_vencedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column idade_perdedor
+		dataType: double
+		lineageTag: 530e4eaa-af29-46d9-bd15-d72f5ddf401f
+		summarizeBy: none
+		sourceColumn: idade_perdedor
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ranking_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: badf574f-0ff1-44cc-b81a-67da1913a64e
+		summarizeBy: none
+		sourceColumn: ranking_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ranking_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b3c913b-379e-4be0-b9e2-5971ce5cda4c
+		summarizeBy: none
+		sourceColumn: pontos_ranking_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column cabeca_chave_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 4dcb04a7-a856-44ae-98b5-7860f7339cbb
+		summarizeBy: none
+		sourceColumn: cabeca_chave_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column entrada_perdedor
+		dataType: string
+		lineageTag: edb06d3a-363a-48ac-b93b-de02491d41ba
+		summarizeBy: none
+		sourceColumn: entrada_perdedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column aces_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: fd64a0d4-4b88-4477-9b9a-897342e518e1
+		summarizeBy: none
+		sourceColumn: aces_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column duplas_faltas_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: d0408c5d-3c2d-467d-9f2a-f4bbf4cdc18a
+		summarizeBy: none
+		sourceColumn: duplas_faltas_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_saque_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: fcbcc226-684c-4532-be13-f8738d5159c7
+		summarizeBy: none
+		sourceColumn: pontos_saque_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column primeiro_saque_dentro_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 35811b83-0820-448e-95da-ca755440a8fc
+		summarizeBy: none
+		sourceColumn: primeiro_saque_dentro_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ganhos_primeiro_saque_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 79297699-7751-47b7-bc0b-b1186ae5e7e7
+		summarizeBy: none
+		sourceColumn: pontos_ganhos_primeiro_saque_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ganhos_segundo_saque_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: daa6fd0f-5a02-486c-b071-9f9e96ddf039
+		summarizeBy: none
+		sourceColumn: pontos_ganhos_segundo_saque_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column games_saque_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: fdf19516-14b5-4ebb-9b88-27299e1152ce
+		summarizeBy: none
+		sourceColumn: games_saque_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column break_points_salvos_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 68ef10f8-2c78-42da-b713-563656ff2d9f
+		summarizeBy: none
+		sourceColumn: break_points_salvos_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column break_points_enfrentados_vencedor
+		dataType: int64
+		formatString: 0
+		lineageTag: b27c196b-d86d-43e0-8f06-4d20b4959645
+		summarizeBy: none
+		sourceColumn: break_points_enfrentados_vencedor
+
+		annotation SummarizationSetBy = User
+
+	column aces_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 31d7c11e-6e5c-4842-8a7d-37ca9e3a5b49
+		summarizeBy: none
+		sourceColumn: aces_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column duplas_faltas_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 5ae19404-74bd-453d-bfcb-39aabf872966
+		summarizeBy: none
+		sourceColumn: duplas_faltas_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_saque_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: e58596e4-c671-4f54-9e7c-d58231d30198
+		summarizeBy: none
+		sourceColumn: pontos_saque_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column primeiro_saque_dentro_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 17220b0b-b4d1-4b77-9ea4-c29a674c0d57
+		summarizeBy: none
+		sourceColumn: primeiro_saque_dentro_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ganhos_primeiro_saque_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a7a539d-c677-4300-97c1-de3125c902d1
+		summarizeBy: none
+		sourceColumn: pontos_ganhos_primeiro_saque_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column pontos_ganhos_segundo_saque_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bc3dc46-0369-46f2-8686-76381620b066
+		summarizeBy: none
+		sourceColumn: pontos_ganhos_segundo_saque_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column games_saque_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: b4a89554-557c-4212-b84a-638c1e3282f4
+		summarizeBy: none
+		sourceColumn: games_saque_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column break_points_salvos_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: 03763f5b-f2de-409f-a3e3-55fbc16ba4d2
+		summarizeBy: none
+		sourceColumn: break_points_salvos_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column break_points_enfrentados_perdedor
+		dataType: int64
+		formatString: 0
+		lineageTag: a2b3d344-726b-4ed7-9ac1-1ceaa9816a02
+		summarizeBy: none
+		sourceColumn: break_points_enfrentados_perdedor
+
+		annotation SummarizationSetBy = User
+
+	column mao_vencedor
+		dataType: string
+		lineageTag: f34e1a16-8ece-408f-8d9a-c3ae16892290
+		summarizeBy: none
+		sourceColumn: mao_vencedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column mao_perdedor
+		dataType: string
+		lineageTag: e0227465-8ab4-4e5e-a9e5-37fc69c98726
+		summarizeBy: none
+		sourceColumn: mao_perdedor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_Resultados_Gold = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Origem = f_Resultados_Silver,
+				
+				    // 1. Chave única da partida
+				    #"Id partida" = Table.AddColumn(
+				        Origem,
+				        "id_partida",
+				        each [id_torneio] & "-" & Text.From([num_partida]),
+				        type text
+				    ),
+				
+				    // 2. Manter apenas chaves, atributos da partida e métricas
+				    ColunasFato = {
+				        // Chaves
+				        "id_partida", "id_torneio", "data_torneio", "rodada", "id_perfil_partida",
+				        "id_vencedor", "id_perdedor",
+				
+				        // Partida
+				        "placar", "minutos",
+				
+				        // Contexto do vencedor na partida
+				        "idade_vencedor", "ranking_vencedor", "pontos_ranking_vencedor",
+				        "cabeca_chave_vencedor", "entrada_vencedor", "mao_vencedor",
+				
+				        // Contexto do perdedor na partida
+				        "idade_perdedor", "ranking_perdedor", "pontos_ranking_perdedor",
+				        "cabeca_chave_perdedor", "entrada_perdedor", "mao_perdedor",
+				
+				        // Estatísticas do vencedor
+				        "aces_vencedor", "duplas_faltas_vencedor", "pontos_saque_vencedor",
+				        "primeiro_saque_dentro_vencedor", "pontos_ganhos_primeiro_saque_vencedor",
+				        "pontos_ganhos_segundo_saque_vencedor", "games_saque_vencedor",
+				        "break_points_salvos_vencedor", "break_points_enfrentados_vencedor",
+				
+				        // Estatísticas do perdedor
+				        "aces_perdedor", "duplas_faltas_perdedor", "pontos_saque_perdedor",
+				        "primeiro_saque_dentro_perdedor", "pontos_ganhos_primeiro_saque_perdedor",
+				        "pontos_ganhos_segundo_saque_perdedor", "games_saque_perdedor",
+				        "break_points_salvos_perdedor", "break_points_enfrentados_perdedor"
+				    },
+				    #"Colunas da fato" = Table.SelectColumns(#"Id partida", ColunasFato),
+				
+				    // 3. Tipagem final explícita
+				    ColunasTexto = {
+				        "id_partida", "id_torneio", "rodada", "id_perfil_partida", "placar",
+				        "entrada_vencedor", "entrada_perdedor", "mao_vencedor", "mao_perdedor"
+				    },
+				    ColunasDecimal = {"idade_vencedor", "idade_perdedor"},
+				    ColunasData = {"data_torneio"},
+				    ColunasInteiro = List.Difference(ColunasFato, ColunasTexto & ColunasDecimal & ColunasData),
+				
+				    Tipos =
+				        List.Transform(ColunasTexto,   each {_, type text})
+				        & List.Transform(ColunasInteiro, each {_, Int64.Type})
+				        & List.Transform(ColunasDecimal, each {_, type number})
+				        & List.Transform(ColunasData,    each {_, type date}),
+				
+				    #"Tipos ajustados" = Table.TransformColumnTypes(#"Colunas da fato", Tipos)
+				in
+				    #"Tipos ajustados"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

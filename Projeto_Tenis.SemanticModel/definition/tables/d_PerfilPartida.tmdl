@@ -1,0 +1,91 @@
+table d_PerfilPartida
+	lineageTag: 834f33ee-b873-4cc7-bdb9-17ebe7720ee7
+
+	column id_perfil_partida
+		dataType: string
+		lineageTag: 82445508-7401-4475-8b17-d69af22bdbab
+		summarizeBy: none
+		sourceColumn: id_perfil_partida
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_termino
+		dataType: string
+		lineageTag: 22cf8803-6143-4f42-bc6f-c3697616ae7a
+		summarizeBy: none
+		sourceColumn: tipo_termino
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_sets
+		dataType: int64
+		formatString: 0
+		lineageTag: 65bc0720-c04b-4356-bc4f-c537429281e9
+		summarizeBy: none
+		sourceColumn: num_sets
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_tiebreaks
+		dataType: int64
+		formatString: 0
+		lineageTag: fd0fb2df-daf9-45fc-be7d-a53b899f140c
+		summarizeBy: none
+		sourceColumn: num_tiebreaks
+
+		annotation SummarizationSetBy = Automatic
+
+	column teve_tiebreak
+		dataType: string
+		lineageTag: 8a9390d5-2b60-47cf-8ac3-d18e78c4c504
+		summarizeBy: none
+		sourceColumn: teve_tiebreak
+
+		annotation SummarizationSetBy = Automatic
+
+	column sets_descricao
+		dataType: string
+		lineageTag: 80e05697-07ae-4ab6-8a43-e9850386c48e
+		summarizeBy: none
+		sourceColumn: sets_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordem_termino
+		dataType: int64
+		formatString: 0
+		lineageTag: fa04272a-21dc-4b73-a43e-40dd5cd89978
+		summarizeBy: none
+		sourceColumn: ordem_termino
+
+		annotation SummarizationSetBy = Automatic
+
+	column partida_completa
+		dataType: string
+		lineageTag: 4d0542c7-f38f-4b98-b5bd-77700bf3d4fc
+		summarizeBy: none
+		sourceColumn: partida_completa
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_PerfilPartida = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Origem = f_Resultados_Silver,
+				    #"Escolher colunas" = Table.SelectColumns(Origem, {"id_perfil_partida", "tipo_termino", "num_sets", "num_tiebreaks"}),
+				    #"Perfis únicos" = Table.Distinct(#"Escolher colunas", {"id_perfil_partida"}),
+				    #"Teve tiebreak" = Table.AddColumn(#"Perfis únicos", "teve_tiebreak", each if [num_tiebreaks] > 0 then "Sim" else "Não", type text),
+				    #"Sets descricao" = Table.AddColumn(#"Teve tiebreak", "sets_descricao", each
+				        if [num_sets] = 0 then "Sem sets" else Text.From([num_sets]) & (if [num_sets] = 1 then " set" else " sets"), type text),
+				    #"Ordem termino" = Table.AddColumn(#"Sets descricao", "ordem_termino", each
+				        Record.FieldOrDefault([Normal = 1, Abandono = 2, #"W.O." = 3, #"Desclassificação" = 4], [tipo_termino], 99), Int64.Type),
+				    #"Partida completa" = Table.AddColumn(#"Ordem termino", "partida_completa", each if [tipo_termino] = "Normal" then "Sim" else "Não", type text)
+				in
+				    #"Partida completa"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

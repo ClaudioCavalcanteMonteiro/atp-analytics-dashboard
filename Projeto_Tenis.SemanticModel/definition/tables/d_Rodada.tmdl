@@ -1,0 +1,61 @@
+table d_Rodada
+	lineageTag: a2cf403d-3cb3-4c70-a98d-f7387d7e5b78
+
+	column rodada
+		dataType: string
+		lineageTag: ccce0b6e-6307-4805-bb4c-de9ff13ba43d
+		summarizeBy: none
+		sourceColumn: rodada
+
+		annotation SummarizationSetBy = Automatic
+
+	column rodada_nome
+		dataType: string
+		lineageTag: 6e31cfe5-4da8-40cf-9d0e-9b953cef4bbb
+		summarizeBy: none
+		sourceColumn: rodada_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordem_rodada
+		dataType: int64
+		formatString: 0
+		lineageTag: 520c3c53-9ffb-43a8-8832-31d14a66ff14
+		summarizeBy: none
+		sourceColumn: ordem_rodada
+
+		annotation SummarizationSetBy = Automatic
+
+	column fase
+		dataType: string
+		lineageTag: dea7ec64-6a41-4cd3-b506-078877b6b8f9
+		summarizeBy: none
+		sourceColumn: fase
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_Rodada = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Fonte = #table(
+				        type table [rodada = text, rodada_nome = text, ordem_rodada = Int64.Type, fase = text],
+				        {
+				            {"RR",  "Fase de grupos",    0, "Fase de grupos"},
+				            {"R128", "Rodada de 128",    1, "Fase inicial"},
+				            {"R64", "Rodada de 64",      2, "Fase inicial"},
+				            {"R32", "Rodada de 32",      3, "Fase inicial"},
+				            {"R16", "Oitavas de final",  4, "Fase inicial"},
+				            {"QF",  "Quartas de final",  5, "Fase final"},
+				            {"SF",  "Semifinal",         6, "Fase final"},
+				            {"F",   "Final",             7, "Fase final"}
+				        }
+				    )
+				in
+				    Fonte
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

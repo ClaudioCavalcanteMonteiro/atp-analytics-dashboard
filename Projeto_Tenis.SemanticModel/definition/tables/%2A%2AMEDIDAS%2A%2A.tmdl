@@ -1,0 +1,1048 @@
+table **MEDIDAS**
+	lineageTag: a7762900-28d5-45bd-8147-b328bd097621
+
+	measure '1.Vitorias' =
+			
+			
+			CALCULATE(
+			    COUNTROWS(f_Resultados_Gold),
+			    KEEPFILTERS(d_PerfilPartida[tipo_termino] <> "W.O."))
+		formatString: 0
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: 218290d8-5f73-4cba-ae32-cf4a57e6e6cc
+
+	measure '2.Derrotas' =
+			
+			
+			CALCULATE(
+			    COUNTROWS(f_Resultados_Gold),
+			    USERELATIONSHIP(d_Jogadores[id_jogador],f_Resultados_Gold[id_perdedor]),
+			    KEEPFILTERS(d_PerfilPartida[tipo_termino] <> "W.O.")
+			) + 0
+		formatString: 0
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: f9ad1198-7204-40c8-aff1-e8d109d047ab
+
+	measure '3.Partidas' = ```
+			
+			    [1.Vitorias] + [2.Derrotas] +0
+			```
+		formatString: 0
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: 3212200f-bb33-4a10-82ce-aaee529b40ff
+
+	measure '4.%Vitorias' = ```
+			
+			
+			    DIVIDE([1.Vitorias] + 0, [3.Partidas])
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: 1d520e0b-e581-48dd-b895-37f38eb45084
+
+	measure '5.Títulos' = ```
+			
+			
+			    CALCULATE([1.Vitorias], d_Rodada[rodada] = "F") +0
+			```
+		formatString: 0
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: bead5764-cc0e-424a-bd04-a4a52461d1a5
+
+	measure '6. Finais Disputadas' = ```
+			
+			
+			    CALCULATE([3.Partidas], d_Rodada[rodada] = "F")
+			    
+			```
+		formatString: 0
+		displayFolder: 1.Vitorias, Derrotas, Partidas, Titulos
+		lineageTag: fbf0c36a-cf90-4a42-b5b6-f0b05ea55a92
+
+	measure '1.Mao' =
+			
+			
+			SWITCH(
+			    SELECTEDVALUE(d_Jogadores[mao]),
+			    "R", "Destro",
+			    "L", "Canhoto",
+			    "Não informado"
+			)
+		displayFolder: 2.Atributos Jogador
+		lineageTag: 955c8de9-4476-4d8d-91f8-b0ac282be53f
+
+	measure '5.Idade Atual' =
+			
+			VAR t =
+			    UNION (
+			        CALCULATETABLE (
+			            SELECTCOLUMNS ( f_Resultados_Gold, "d", f_Resultados_Gold[data_torneio], "i", f_Resultados_Gold[idade_vencedor] ),
+			            REMOVEFILTERS ( d_Calendario )
+			        ),
+			        CALCULATETABLE (
+			            SELECTCOLUMNS ( f_Resultados_Gold, "d", f_Resultados_Gold[data_torneio], "i", f_Resultados_Gold[idade_perdedor] ),
+			            USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] ),
+			            REMOVEFILTERS ( d_Calendario )
+			        )
+			    )
+			VAR UltimaData = MAXX ( t, [d] )
+			VAR IdadeUltima = MAXX ( FILTER ( t, [d] = UltimaData ), [i] )
+			RETURN
+			    IF (
+			        HASONEVALUE ( d_Jogadores[id_jogador] ),
+			        INT ( IdadeUltima + DATEDIFF ( UltimaData, TODAY (), DAY ) / 365.25 )
+			    )
+		formatString: 0
+		displayFolder: 2.Atributos Jogador
+		lineageTag: adc1a554-c6c2-4dec-88aa-6eca8c60a653
+
+	measure '01.Aces' =
+			
+			
+			SUM ( f_Resultados_Gold[aces_vencedor] )
+			    + CALCULATE ( SUM ( f_Resultados_Gold[aces_perdedor] ), USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor]))
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 18e39e8c-7160-44ab-a92d-ebb37547fe80
+
+	measure '02.Duplas Faltas' =
+			
+			
+			SUM ( f_Resultados_Gold[duplas_faltas_vencedor] )
+			    + CALCULATE ( SUM ( f_Resultados_Gold[duplas_faltas_perdedor] ), USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 4221deb4-9278-482f-bb70-3e1f196d14d5
+
+	measure '09.Partidas com Estatística' =
+			
+			
+			CALCULATE ( COUNTROWS ( f_Resultados_Gold ), NOT ISBLANK ( f_Resultados_Gold[pontos_saque_vencedor] ) )
+			    + CALCULATE (
+			        COUNTROWS ( f_Resultados_Gold),
+			        NOT ISBLANK ( f_Resultados_Gold[pontos_saque_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 7369923b-fe75-464c-9510-50e436891560
+
+	measure '14.Aces por Partida' =
+			
+			
+			DIVIDE([01.Aces], [09.Partidas com Estatística])
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 87ac5a0a-b5be-4c3d-aa60-0d2c06cd56c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '15.Dupla falta por partida' =
+			
+			
+			DIVIDE([02.Duplas Faltas], [09.Partidas com Estatística])
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: cf709b14-be9e-45a3-b6aa-fe82986d7e9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Perfil Jogador' = ```
+			
+			 " · " &
+			[1.Mao] & " · "&
+			 SELECTEDVALUE ( d_Jogadores[altura] ) & " cm · " & [5.Idade Atual] & " anos"
+			```
+		displayFolder: 5.KPI
+		lineageTag: a63111e8-8d99-4f37-a3b1-b4060d481303
+
+	measure '1KPI Ranking' =
+			
+			
+			VAR r = SELECTEDVALUE ( d_Top100[ranking_atual] )
+			RETURN IF ( NOT ISBLANK ( r ), "#" & r, "—" )
+		displayFolder: 5.KPI
+		lineageTag: 2c1bf599-c510-4a17-9466-77b9944e9cf9
+
+	measure '2KPI Pontos' =
+			
+			
+			VAR p = SELECTEDVALUE ( d_Top100[pontos_atual] )
+			RETURN IF ( NOT ISBLANK ( p ), FORMAT ( p, "#,0" ), "—" )
+		displayFolder: 5.KPI
+		lineageTag: 00dc3963-44f1-4231-8d6f-45542dea7aa5
+
+	measure 'Melhor Ranking' =
+			
+			VAR t =
+			    UNION (
+			        SELECTCOLUMNS ( f_Resultados_Gold, "r", f_Resultados_Gold[ranking_vencedor] ),
+			        CALCULATETABLE (
+			            SELECTCOLUMNS ( f_Resultados_Gold, "r", f_Resultados_Gold[ranking_perdedor] ),
+			            USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			        )
+			    )
+			VAR MelhorBase = MINX ( t, [r] )
+			VAR Atual      = SELECTEDVALUE ( d_Top100[ranking_atual] )
+			VAR Melhor =
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( MelhorBase ), Atual,
+			        ISBLANK ( Atual ), MelhorBase,
+			        MIN ( MelhorBase, Atual )
+			    )
+			RETURN
+			    IF ( HASONEVALUE ( d_Jogadores[id_jogador] ), Melhor )
+		formatString: 0
+		displayFolder: 5.KPI
+		lineageTag: 5998a35e-3c59-42a2-a548-bc8e0e47bbb0
+
+	measure '4KPI     Retrospecto' =
+			
+			
+			IF ( HASONEVALUE ( d_Jogadores[id_jogador] ), [1.Vitorias] & "V – " & [2.Derrotas] & "D" )
+		displayFolder: 5.KPI
+		lineageTag: cab685bf-5918-4782-ac63-56576798e620
+
+	measure '1.CARTAO HTML KPIs' =
+			
+			VAR FonteTexto = "font-family:'Segoe UI',sans-serif;"
+			VAR FonteNum   = "font-family:'Segoe UI Semibold','Segoe UI',sans-serif;font-weight:600;"
+			
+			VAR sRotulo   = FonteTexto & "font-size:13px;color:#767676;letter-spacing:0.6px;text-transform:uppercase;white-space:nowrap;margin-bottom:2px;"
+			VAR sValor    = FonteNum & "font-size:36px;color:#333333;line-height:1.1;white-space:nowrap;"
+			VAR sDestaque = FonteNum & "font-size:36px;color:#1F4E79;line-height:1.1;white-space:nowrap;"
+			VAR sContexto = FonteTexto & "font-size:13px;color:#8A8A8A;white-space:nowrap;margin-top:4px;"
+			VAR sColuna   = "flex:1 1 0;min-width:0;padding-right:16px;box-sizing:border-box;"
+			
+			-- Barra de progresso (o CSS precisa de ponto decimal)
+			VAR BarraIni = "<div style=""width:110px;height:5px;background:#E6E6E6;border-radius:3px;margin-top:8px;""><div style=""width:"
+			VAR BarraFim = "%;height:5px;background:#C8D646;border-radius:3px;""></div></div>"
+			
+			-- Espaço com a mesma altura da barra, para alinhar o contexto dos KPIs sem barra
+			VAR Espaco = "<div style=""height:5px;margin-top:8px;""></div>"
+			
+			VAR PctV   = [4.%Vitorias]
+			VAR BarraV = BarraIni & SUBSTITUTE ( FORMAT ( PctV * 100, "0.0" ), ",", "." ) & BarraFim
+			
+			VAR PctTop   = [% Vitórias vs Top 10]
+			VAR BarraTop = IF ( ISBLANK ( PctTop ), Espaco, BarraIni & SUBSTITUTE ( FORMAT ( PctTop * 100, "0.0" ), ",", "." ) & BarraFim )
+			
+			-- Ranking
+			VAR C1 =
+			    "<div style=""" & sColuna & """>"
+			        & "<div style=""" & sRotulo & """>Ranking</div>"
+			        & "<div style=""" & sDestaque & """>" & [1KPI Ranking] & "</div>"
+			        & Espaco
+			        & "<div style=""" & sContexto & """>" & [3KPI Melhor Ranking] & "</div>"
+			    & "</div>"
+			
+			-- Pontos
+			VAR C2 =
+			    "<div style=""" & sColuna & """>"
+			        & "<div style=""" & sRotulo & """>Pontos</div>"
+			        & "<div style=""" & sValor & """>" & [2KPI Pontos] & "</div>"
+			        & Espaco
+			        & "<div style=""" & sContexto & """>em 20/10/2026</div>"
+			    & "</div>"
+			
+			-- Vitórias
+			VAR C3 =
+			    "<div style=""" & sColuna & """>"
+			        & "<div style=""" & sRotulo & """>Vitórias</div>"
+			        & "<div style=""" & sValor & """>" & FORMAT ( PctV, "0.0%" ) & "</div>"
+			        & BarraV
+			        & "<div style=""" & sContexto & """>" & [4KPI     Retrospecto] & "</div>"
+			    & "</div>"
+			
+			-- Títulos
+			VAR C4 =
+			    "<div style=""" & sColuna & """>"
+			        & "<div style=""" & sRotulo & """>Títulos</div>"
+			        & "<div style=""" & sValor & """>" & [5.Títulos] & "</div>"
+			        & Espaco
+			        & "<div style=""" & sContexto & """>de " & [6. Finais Disputadas] & " finais</div>"
+			    & "</div>"
+			
+			-- Vs. Top 10
+			VAR C5 =
+			    "<div style=""" & sColuna & """>"
+			        & "<div style=""" & sRotulo & """>Vs. Top 10</div>"
+			        & "<div style=""" & sValor & """>" & IF ( ISBLANK ( PctTop ), "—", FORMAT ( PctTop, "0.0%" ) ) & "</div>"
+			        & BarraTop
+			        & "<div style=""" & sContexto & """>" & [Vitórias vs Top 10] + 0 & "V – " & [Derrotas vs Top 10] + 0 & "D</div>"
+			    & "</div>"
+			
+			RETURN
+			    IF (
+			        HASONEVALUE ( d_Jogadores[id_jogador] ),
+			        "<div style=""display:flex;align-items:flex-start;padding:8px 12px;"">"
+			            & C1 & C2 & C3 & C4 & C5
+			        & "</div>"
+			    )
+		displayFolder: 6.Cartoes HTML
+		lineageTag: 7cc42b3b-dafe-41d5-9261-c4182ed09993
+
+	measure '3KPI Melhor Ranking' =
+			
+			VAR m = [Melhor Ranking]
+			RETURN IF ( NOT ISBLANK ( m ), "Melhor: #" & m )
+		displayFolder: 5.KPI
+		lineageTag: 01944349-b1ff-4bda-aaae-9a2b9612a54f
+
+	measure 'Vitórias vs Top 10' =
+			
+			CALCULATE (
+			    [1.Vitorias],
+			    KEEPFILTERS ( f_Resultados_Gold[ranking_perdedor] <= 10 )
+			)
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 6ab1a898-99b1-492a-90ed-7429f097cd3c
+
+	measure 'Derrotas vs Top 10' =
+			
+			CALCULATE (
+			    [2.Derrotas],
+			    KEEPFILTERS ( f_Resultados_Gold[ranking_vencedor] <= 10 )
+			)
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 414bf296-80d4-4d9a-b279-e037ef821106
+
+	measure '% Vitórias vs Top 10' =
+			
+			DIVIDE (
+			    [Vitórias vs Top 10],
+			    [Vitórias vs Top 10] + [Derrotas vs Top 10]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: c4efafb0-d4ff-44da-91aa-38046f94fb48
+
+	measure 'Aces por Partida (Circuito)' =
+			
+			CALCULATE ( [14.Aces por Partida], REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: d1935cc0-3573-442a-a844-20956f3c99a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Duplas Faltas por Partida (Circuito)' =
+			
+			CALCULATE ( [15.Dupla falta por partida], REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 3feaf109-fcb9-4285-91cc-3a760a1d6d38
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '2.CARTAO HTML Jogo' =
+			
+			VAR FonteTexto = "font-family:'Segoe UI',sans-serif;"
+			VAR FonteNum   = "font-family:'Segoe UI Semibold','Segoe UI',sans-serif;font-weight:600;"
+			
+			VAR sTitulo    = FonteNum & "font-size:17px;color:#333333;"
+			VAR sSubtitulo = FonteTexto & "font-size:12px;color:#767676;"
+			VAR sSecao     = FonteTexto & "font-size:11px;color:#9A9A9A;letter-spacing:0.8px;text-transform:uppercase;margin:14px 0 6px 0;border-bottom:1px solid #EEEEEE;padding-bottom:4px;"
+			VAR sRotulo    = FonteTexto & "font-size:12px;color:#767676;"
+			VAR sValor     = FonteNum & "font-size:30px;color:#333333;line-height:1.1;"
+			VAR sContexto  = FonteTexto & "font-size:12px;color:#8A8A8A;"
+			
+			-- ===== Saque: bolinhas =====
+			VAR Bola      = "<span style=""display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:4px;background:"
+			VAR BolaAce   = Bola & "#C8D646;""></span>"
+			VAR BolaDF    = Bola & "#B85C5C;""></span>"
+			VAR BolaVazia = Bola & "#E6E6E6;""></span>"
+			
+			VAR AcesJ = [14.Aces por Partida]
+			VAR AcesC = [Aces por Partida (Circuito)]
+			VAR DFJ   = [15.Dupla falta por partida]
+			VAR DFC   = [Duplas Faltas por Partida (Circuito)]
+			
+			VAR BolasAces = REPT ( BolaAce, ROUND ( AcesJ, 0 ) ) & REPT ( BolaVazia, MAX ( ROUND ( AcesC, 0 ) - ROUND ( AcesJ, 0 ), 0 ) )
+			VAR BolasDF   = REPT ( BolaDF, ROUND ( DFJ, 0 ) ) & REPT ( BolaVazia, MAX ( ROUND ( DFC, 0 ) - ROUND ( DFJ, 0 ), 0 ) )
+			
+			VAR BlocoAces =
+			    "<div style=""flex:1;"">"
+			        & "<div style=""" & sRotulo & """>Aces por partida</div>"
+			        & "<div style=""" & sValor & """>" & FORMAT ( AcesJ, "0.0" ) & "</div>"
+			        & "<div style=""margin:4px 0 3px 0;"">" & BolasAces & "</div>"
+			        & "<div style=""" & sContexto & """>Circuito: " & FORMAT ( AcesC, "0.0" ) & "</div>"
+			    & "</div>"
+			
+			VAR BlocoDF =
+			    "<div style=""flex:1;"">"
+			        & "<div style=""" & sRotulo & """>Duplas faltas por partida</div>"
+			        & "<div style=""" & sValor & """>" & FORMAT ( DFJ, "0.0" ) & "</div>"
+			        & "<div style=""margin:4px 0 3px 0;"">" & BolasDF & "</div>"
+			        & "<div style=""" & sContexto & """>Circuito: " & FORMAT ( DFC, "0.0" ) & "</div>"
+			    & "</div>"
+			
+			-- ===== Confrontos: modelo de linha com barra =====
+			VAR Linha =
+			    "<div style=""display:flex;align-items:center;margin:7px 0;"">"
+			        & "<div style=""width:96px;" & sRotulo & """>%ROTULO%</div>"
+			        & "<div style=""flex:1;height:8px;background:#EEEEEE;border-radius:4px;margin-right:10px;"">"
+			            & "<div style=""width:%LARG%%;height:8px;background:#1F4E79;border-radius:4px;""></div>"
+			        & "</div>"
+			        & "<div style=""width:56px;text-align:right;" & FonteNum & "font-size:15px;color:#333333;"">%PCT%</div>"
+			        & "<div style=""width:80px;text-align:right;" & sContexto & """>%CTX%</div>"
+			    & "</div>"
+			
+			VAR PctR = [% Vitórias vs Destros]
+			VAR PctL = [% Vitórias vs Canhotos]
+			VAR Pct3 = [% Vitórias em 3 Sets]
+			
+			VAR LinhaR =
+			    SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Linha,
+			        "%ROTULO%", "Vs. destros" ),
+			        "%LARG%", SUBSTITUTE ( FORMAT ( PctR * 100, "0.0" ), ",", "." ) ),
+			        "%PCT%", IF ( ISBLANK ( PctR ), "—", FORMAT ( PctR, "0.0%" ) ) ),
+			        "%CTX%", [Vitórias vs Destros] + 0 & "V – " & [Derrotas vs Destros] + 0 & "D" )
+			
+			VAR LinhaL =
+			    SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Linha,
+			        "%ROTULO%", "Vs. canhotos" ),
+			        "%LARG%", SUBSTITUTE ( FORMAT ( PctL * 100, "0.0" ), ",", "." ) ),
+			        "%PCT%", IF ( ISBLANK ( PctL ), "—", FORMAT ( PctL, "0.0%" ) ) ),
+			        "%CTX%", [Vitórias vs Canhotos] + 0 & "V – " & [Derrotas vs Canhotos] + 0 & "D" )
+			
+			VAR Linha3 =
+			    SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Linha,
+			        "%ROTULO%", "Em 3 sets" ),
+			        "%LARG%", SUBSTITUTE ( FORMAT ( Pct3 * 100, "0.0" ), ",", "." ) ),
+			        "%PCT%", IF ( ISBLANK ( Pct3 ), "—", FORMAT ( Pct3, "0.0%" ) ) ),
+			        "%CTX%", [Vitórias em 3 Sets] + 0 & "V – " & [Derrotas em 3 Sets] + 0 & "D" )
+			
+			-- ===== Duração =====
+			VAR DurJ = [Duração Média (min)]
+			VAR DurC = [Duração Média (min) Circuito]
+			VAR TxtJ = INT ( ROUND ( DurJ, 0 ) / 60 ) & "h" & FORMAT ( MOD ( ROUND ( DurJ, 0 ), 60 ), "00" )
+			VAR TxtC = INT ( ROUND ( DurC, 0 ) / 60 ) & "h" & FORMAT ( MOD ( ROUND ( DurC, 0 ), 60 ), "00" )
+			
+			VAR BlocoDuracao =
+			    "<div style=""display:flex;align-items:baseline;gap:10px;"">"
+			        & "<div style=""" & sValor & "font-size:26px;"">" & TxtJ & "</div>"
+			        & "<div style=""" & sContexto & """>por partida · circuito: " & TxtC & "</div>"
+			    & "</div>"
+			
+			RETURN
+			    IF (
+			        HASONEVALUE ( d_Jogadores[id_jogador] ),
+			        "<div style=""padding:6px 10px;"">"
+			            & "<div style=""" & sTitulo & """>Jogo em números</div>"
+			            & "<div style=""" & sSubtitulo & """>Média por partida e desempenho por tipo de confronto</div>"
+			            & "<div style=""" & sSecao & """>Saque</div>"
+			            & "<div style=""display:flex;gap:16px;"">" & BlocoAces & BlocoDF & "</div>"
+			            & "<div style=""" & sSecao & """>% de vitórias por confronto</div>"
+			            & LinhaR & LinhaL & Linha3
+			            & "<div style=""" & sSecao & """>Duração</div>"
+			            & BlocoDuracao
+			        & "</div>"
+			    )
+		displayFolder: 6.Cartoes HTML
+		lineageTag: 054db2f6-b9e1-437f-a3a7-a8504e83d979
+
+	measure 'Vitórias em 3 Sets' =
+			
+			CALCULATE ( [1.Vitorias], d_PerfilPartida[tipo_termino] = "Normal", d_PerfilPartida[num_sets] = 3 )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 9c1e6718-bebc-47bf-931c-3ebb980945ff
+
+	measure 'Derrotas em 3 Sets' =
+			
+			CALCULATE ( [2.Derrotas], d_PerfilPartida[tipo_termino] = "Normal", d_PerfilPartida[num_sets] = 3 )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 59503ec2-520f-4169-8d2f-3f1ef854494c
+
+	measure '% Vitórias em 3 Sets' =
+			
+			DIVIDE ( [Vitórias em 3 Sets], [Vitórias em 3 Sets] + [Derrotas em 3 Sets] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 7a28af96-c219-4bce-9eea-2e3017165eca
+
+	measure 'Minutos Jogados' =
+			
+			SUM ( f_Resultados_Gold[minutos] )
+			    + CALCULATE ( SUM ( f_Resultados_Gold[minutos] ), USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: bdfc4e3d-7a13-4870-aee9-235d0535292e
+
+	measure 'Partidas com Duração' =
+			
+			CALCULATE ( COUNTROWS ( f_Resultados_Gold ), NOT ISBLANK ( f_Resultados_Gold[minutos] ) )
+			    + CALCULATE (
+			        COUNTROWS ( f_Resultados_Gold ),
+			        NOT ISBLANK ( f_Resultados_Gold[minutos] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 31e5f3c3-233e-4ab0-9573-c31e7ab13e5c
+
+	measure 'Duração Média (min)' =
+			
+			
+			DIVIDE ( [Minutos Jogados], [Partidas com Duração] )
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 907cf396-f45f-4711-bc13-f1f8f26ea234
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Duração Média (min) Circuito' =
+			
+			CALCULATE ( [Duração Média (min)], REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: dfd8104a-ddcb-4878-88cb-48da2fbb31fc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Vitórias vs Destros' =
+			
+			CALCULATE ( [1.Vitorias], KEEPFILTERS ( f_Resultados_Gold[mao_perdedor] = "R" ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: feafcf69-ce69-40b1-aa8d-b3580c892681
+
+	measure 'Derrotas vs Destros' =
+			
+			CALCULATE ( [2.Derrotas], KEEPFILTERS ( f_Resultados_Gold[mao_vencedor] = "R" ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: f9d64760-9d81-408d-8ece-b260f45ef72b
+
+	measure '% Vitórias vs Destros' =
+			
+			DIVIDE ( [Vitórias vs Destros], [Vitórias vs Destros] + [Derrotas vs Destros] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: fd492e1e-045f-4c62-9ff0-e649d3f11e75
+
+	measure 'Vitórias vs Canhotos' =
+			
+			CALCULATE ( [1.Vitorias], KEEPFILTERS ( f_Resultados_Gold[mao_perdedor] = "L" ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 44d710ee-3fed-43e6-b20c-719d5da610d2
+
+	measure 'Derrotas vs Canhotos' =
+			
+			CALCULATE ( [2.Derrotas], KEEPFILTERS ( f_Resultados_Gold[mao_vencedor] = "L" ) )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 46217099-910d-4f4e-b9bc-752be57c354c
+
+	measure '% Vitórias vs Canhotos' =
+			
+			DIVIDE ( [Vitórias vs Canhotos], [Vitórias vs Canhotos] + [Derrotas vs Canhotos] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 42ec8ef9-aa3c-46aa-9a03-ace102e2ba68
+
+	measure 'Pontos disputados no saque' =
+			
+			SUM ( f_Resultados_Gold[pontos_saque_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[pontos_saque_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: f7aac02f-2fe1-4af4-affe-ca2b00f06e57
+
+	measure '1º Saque Dentro' =
+			
+			SUM ( f_Resultados_Gold[primeiro_saque_dentro_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[primeiro_saque_dentro_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: bcdbc516-6f30-4a60-a7f9-cff8ade0ccca
+
+	measure 'Pontos Ganhos 1º Saque' = ```
+			
+			SUM ( f_Resultados_Gold[pontos_ganhos_primeiro_saque_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[pontos_ganhos_primeiro_saque_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+			
+			```
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 1e716043-96fc-4a6f-a8ff-20960425f430
+
+	measure 'Pontos Ganhos 2º Saque' =
+			
+			SUM ( f_Resultados_Gold[pontos_ganhos_segundo_saque_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[pontos_ganhos_segundo_saque_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: a895d48c-1f89-4053-8454-bf4478070d58
+
+	measure 'BP Salvos' =
+			
+			SUM ( f_Resultados_Gold[break_points_salvos_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[break_points_salvos_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: d37045cc-c60c-46ad-9e58-7d560bf55e75
+
+	measure 'BP Enfrentados' =
+			
+			SUM ( f_Resultados_Gold[break_points_enfrentados_vencedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[break_points_enfrentados_perdedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: b58ed819-74fd-4b3e-b6e9-70fd171de2ee
+
+	measure 'Pontos Disputados na Devolução' =
+			
+			SUM ( f_Resultados_Gold[pontos_saque_perdedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[pontos_saque_vencedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 92da2e89-4500-4428-8ecd-1b1ad3798816
+
+	measure 'Pontos Ganhos na Devolução' =
+			
+			(
+			    SUM ( f_Resultados_Gold[pontos_saque_perdedor] )
+			        - SUM ( f_Resultados_Gold[pontos_ganhos_primeiro_saque_perdedor] )
+			        - SUM ( f_Resultados_Gold[pontos_ganhos_segundo_saque_perdedor] )
+			)
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[pontos_saque_vencedor] )
+			            - SUM ( f_Resultados_Gold[pontos_ganhos_primeiro_saque_vencedor] )
+			            - SUM ( f_Resultados_Gold[pontos_ganhos_segundo_saque_vencedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 6e7671b8-f34e-4d90-9678-fabc1183b714
+
+	measure 'BP Oportunidades' =
+			
+			SUM ( f_Resultados_Gold[break_points_enfrentados_perdedor] )
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[break_points_enfrentados_vencedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: fa6265b5-020a-4395-8c95-43a28e631357
+
+	measure 'BP Convertidos' =
+			
+			(
+			    SUM ( f_Resultados_Gold[break_points_enfrentados_perdedor] )
+			        - SUM ( f_Resultados_Gold[break_points_salvos_perdedor] )
+			)
+			    + CALCULATE (
+			        SUM ( f_Resultados_Gold[break_points_enfrentados_vencedor] )
+			            - SUM ( f_Resultados_Gold[break_points_salvos_vencedor] ),
+			        USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] )
+			    )
+		formatString: 0
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: dd57d307-70f1-446f-97af-314859c0bd33
+
+	measure '% 1º Saque' =
+			
+			DIVIDE ( [1º Saque Dentro], [Pontos disputados no saque] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: a738eefe-2105-4dbe-892d-1f4fdccc2025
+
+	measure '% Pontos Ganhos 1º Saque' =
+			
+			DIVIDE ( [Pontos Ganhos 1º Saque], [1º Saque Dentro] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 38aad284-7713-4d6f-b330-7f523a061dbc
+
+	measure '% Pontos Ganhos 2º Saque' =
+			
+			DIVIDE ( [Pontos Ganhos 2º Saque], [Pontos disputados no saque] - [1º Saque Dentro] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: e17e7bd1-a666-4ad1-a554-91dd03723273
+
+	measure '% BP Salvos' =
+			
+			DIVIDE ( [BP Salvos], [BP Enfrentados] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: c16e4aa0-4d51-481b-b36b-f418ef1b7e63
+
+	measure '% Pontos Ganhos na Devolução' =
+			
+			DIVIDE ( [Pontos Ganhos na Devolução], [Pontos Disputados na Devolução] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 872d86a4-4a04-4028-b2b6-041219292623
+
+	measure '% BP Convertidos' =
+			
+			DIVIDE ( [BP Convertidos], [BP Oportunidades] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 4a802f42-f67b-4c8d-96de-db06ed3e6b2a
+
+	measure '3.RADAR SVG' =
+			
+			VAR vMin = 0.30
+			VAR vMax = 0.80
+			VAR R    = 110
+			VAR CX   = 230
+			VAR CY   = 192
+			
+			-- Valores do jogador
+			VAR J1 = [% 1º Saque]
+			VAR J2 = [% Pontos Ganhos 1º Saque]
+			VAR J3 = [% Pontos Ganhos 2º Saque]
+			VAR J4 = [% BP Salvos]
+			VAR J5 = [% Pontos Ganhos na Devolução]
+			VAR J6 = [% BP Convertidos]
+			
+			-- Valores do circuito (sem o filtro do jogador)
+			VAR C1 = CALCULATE ( [% 1º Saque],                   REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			VAR C2 = CALCULATE ( [% Pontos Ganhos 1º Saque],     REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			VAR C3 = CALCULATE ( [% Pontos Ganhos 2º Saque],     REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			VAR C4 = CALCULATE ( [% BP Salvos],                  REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			VAR C5 = CALCULATE ( [% Pontos Ganhos na Devolução], REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			VAR C6 = CALCULATE ( [% BP Convertidos],             REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) )
+			
+			-- Os 6 eixos: ângulo, rótulo e valores
+			VAR Eixos =
+			    ADDCOLUMNS (
+			        SELECTCOLUMNS ( GENERATESERIES ( 0, 5, 1 ), "@i", [Value] ),
+			        "@ang", RADIANS ( -90 + 60 * [@i] ),
+			        "@lab", SWITCH ( [@i], 0, "1º saque", 1, "Pts 1º saque", 2, "Pts 2º saque", 3, "BP salvos", 4, "Pts devolução", 5, "BP convertidos" ),
+			        "@j",   SWITCH ( [@i], 0, J1, 1, J2, 2, J3, 3, J4, 4, J5, 5, J6 ),
+			        "@c",   SWITCH ( [@i], 0, C1, 1, C2, 2, C3, 3, C4, 4, C5, 5, C6 )
+			    )
+			
+			-- Distância do centro (limitada entre vMin e vMax)
+			VAR Raios =
+			    ADDCOLUMNS (
+			        Eixos,
+			        "@rj", R * MAX ( 0, MIN ( 1, DIVIDE ( [@j] - vMin, vMax - vMin ) ) ),
+			        "@rc", R * MAX ( 0, MIN ( 1, DIVIDE ( [@c] - vMin, vMax - vMin ) ) )
+			    )
+			
+			-- Coordenadas em texto, com ponto decimal (o SVG não aceita vírgula)
+			VAR Coords =
+			    ADDCOLUMNS (
+			        Raios,
+			        "@xj", SUBSTITUTE ( FORMAT ( CX + [@rj] * COS ( [@ang] ), "0.0" ), ",", "." ),
+			        "@yj", SUBSTITUTE ( FORMAT ( CY + [@rj] * SIN ( [@ang] ), "0.0" ), ",", "." ),
+			        "@xc", SUBSTITUTE ( FORMAT ( CX + [@rc] * COS ( [@ang] ), "0.0" ), ",", "." ),
+			        "@yc", SUBSTITUTE ( FORMAT ( CY + [@rc] * SIN ( [@ang] ), "0.0" ), ",", "." ),
+			        "@xr", SUBSTITUTE ( FORMAT ( CX + R * COS ( [@ang] ), "0.0" ), ",", "." ),
+			        "@yr", SUBSTITUTE ( FORMAT ( CY + R * SIN ( [@ang] ), "0.0" ), ",", "." ),
+			        "@xl", SUBSTITUTE ( FORMAT ( CX + ( R + 30 ) * COS ( [@ang] ), "0.0" ), ",", "." ),
+			        "@yl1", SUBSTITUTE ( FORMAT ( CY + ( R + 30 ) * SIN ( [@ang] ) - 4, "0.0" ), ",", "." ),
+			        "@yl2", SUBSTITUTE ( FORMAT ( CY + ( R + 30 ) * SIN ( [@ang] ) + 12, "0.0" ), ",", "." ),
+			        "@anc", IF ( ABS ( COS ( [@ang] ) ) < 0.2, "middle", IF ( COS ( [@ang] ) > 0, "start", "end" ) )
+			    )
+			
+			-- Grade: hexágonos de 40% a 80%
+			VAR Grade =
+			    CONCATENATEX (
+			        SELECTCOLUMNS ( GENERATESERIES ( 4, 8, 1 ), "@n", [Value] ),
+			        "<polygon points='"
+			            & CONCATENATEX (
+			                Eixos,
+			                SUBSTITUTE ( FORMAT ( CX + R * ( [@n] / 10 - vMin ) / ( vMax - vMin ) * COS ( [@ang] ), "0.0" ), ",", "." )
+			                    & ","
+			                    & SUBSTITUTE ( FORMAT ( CY + R * ( [@n] / 10 - vMin ) / ( vMax - vMin ) * SIN ( [@ang] ), "0.0" ), ",", "." ),
+			                " ", [@i], ASC
+			            )
+			            & "' fill='none' stroke='%23E6E6E6' stroke-width='1'/>",
+			        ""
+			    )
+			
+			-- Linhas do centro até as pontas
+			VAR EixosLinhas =
+			    CONCATENATEX ( Coords, "<line x1='" & CX & "' y1='" & CY & "' x2='" & [@xr] & "' y2='" & [@yr] & "' stroke='%23EEEEEE'/>", "" )
+			
+			VAR PolyC = CONCATENATEX ( Coords, [@xc] & "," & [@yc], " ", [@i], ASC )
+			VAR PolyJ = CONCATENATEX ( Coords, [@xj] & "," & [@yj], " ", [@i], ASC )
+			
+			VAR Marcadores =
+			    CONCATENATEX ( Coords, "<circle cx='" & [@xj] & "' cy='" & [@yj] & "' r='3.5' fill='%231F4E79'/>", "" )
+			
+			VAR Rotulos =
+			    CONCATENATEX (
+			        Coords,
+			        "<text x='" & [@xl] & "' y='" & [@yl1] & "' text-anchor='" & [@anc] & "' font-size='12' fill='%23767676'>" & [@lab] & "</text>"
+			            & "<text x='" & [@xl] & "' y='" & [@yl2] & "' text-anchor='" & [@anc] & "' font-size='14' font-weight='600' fill='%231F4E79'>"
+			            & SUBSTITUTE ( FORMAT ( [@j], "0.0%" ), "%", "%25" ) & "</text>",
+			        ""
+			    )
+			
+			VAR Legenda =
+			    "<line x1='150' y1='362' x2='172' y2='362' stroke='%231F4E79' stroke-width='2.5'/>"
+			        & "<text x='178' y='366' font-size='11' fill='%23767676'>Jogador</text>"
+			        & "<line x1='250' y1='362' x2='272' y2='362' stroke='%239A9A9A' stroke-width='1.5' stroke-dasharray='4 3'/>"
+			        & "<text x='278' y='366' font-size='11' fill='%23767676'>Circuito</text>"
+			
+			VAR SVG =
+			    "data:image/svg+xml;utf8,"
+			        & "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 460 380' width='460' height='380' font-family='Segoe UI, sans-serif'>"
+			        & Grade
+			        & EixosLinhas
+			        & "<polygon points='" & PolyC & "' fill='none' stroke='%239A9A9A' stroke-width='1.5' stroke-dasharray='4 3'/>"
+			        & "<polygon points='" & PolyJ & "' fill='%231F4E79' fill-opacity='0.12' stroke='%231F4E79' stroke-width='2.5'/>"
+			        & Marcadores
+			        & Rotulos
+			        & Legenda
+			        & "</svg>"
+			
+			RETURN
+			    IF ( HASONEVALUE ( d_Jogadores[id_jogador] ), SVG )
+		displayFolder: 6.Cartoes HTML
+		lineageTag: 1e84330c-3050-4047-89e4-84c6436290c0
+		dataCategory: ImageUrl
+
+	measure '4.RADAR HTML' =
+			
+			VAR FonteTexto = "font-family:'Segoe UI',sans-serif;"
+			VAR FonteNum   = "font-family:'Segoe UI Semibold','Segoe UI',sans-serif;font-weight:600;"
+			
+			VAR sTitulo    = FonteNum & "font-size:17px;color:#333333;"
+			VAR sSubtitulo = FonteTexto & "font-size:12px;color:#767676;margin-bottom:6px;"
+			
+			-- Quantos indicadores estão acima da média do circuito
+			VAR Acima =
+			    ( [% 1º Saque]                   > CALCULATE ( [% 1º Saque],                   REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			    + ( [% Pontos Ganhos 1º Saque]     > CALCULATE ( [% Pontos Ganhos 1º Saque],     REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			    + ( [% Pontos Ganhos 2º Saque]     > CALCULATE ( [% Pontos Ganhos 2º Saque],     REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			    + ( [% BP Salvos]                  > CALCULATE ( [% BP Salvos],                  REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			    + ( [% Pontos Ganhos na Devolução] > CALCULATE ( [% Pontos Ganhos na Devolução], REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			    + ( [% BP Convertidos]             > CALCULATE ( [% BP Convertidos],             REMOVEFILTERS ( d_Jogadores ), REMOVEFILTERS ( d_Top100 ) ) )
+			
+			VAR Subtitulo = "Jogador vs. média do circuito · acima da média em " & Acima & " de 6 indicadores"
+			
+			RETURN
+			    IF (
+			        HASONEVALUE ( d_Jogadores[id_jogador] ),
+			        "<div style=""padding:6px 10px;"">"
+			            & "<div style=""" & sTitulo & """>Perfil de saque e devolução</div>"
+			            & "<div style=""" & sSubtitulo & """>" & Subtitulo & "</div>"
+			            & "<img src=""" & [3.RADAR SVG] & """ style=""width:100%;height:auto;"">"
+			        & "</div>"
+			    )
+		displayFolder: 6.Cartoes HTML
+		lineageTag: 3629e497-8cc9-4555-99e0-1764dc87539a
+
+	measure '5.HTML Superficies' =
+			
+			VAR FonteTexto = "font-family:'Segoe UI',sans-serif;"
+			VAR FonteNum   = "font-family:'Segoe UI Semibold','Segoe UI',sans-serif;font-weight:600;"
+			
+			VAR sTitulo    = FonteNum & "font-size:17px;color:#333333;"
+			VAR sSubtitulo = FonteTexto & "font-size:12px;color:#767676;"
+			VAR sRotulo    = FonteTexto & "font-size:12px;color:#767676;letter-spacing:0.6px;text-transform:uppercase;"
+			VAR sValor     = FonteNum & "font-size:28px;color:#333333;line-height:1.1;"
+			VAR sDestaque  = FonteNum & "font-size:28px;color:#1F4E79;line-height:1.1;"
+			VAR sContexto  = FonteTexto & "font-size:12px;color:#8A8A8A;"
+			VAR AlturaQuadras = 220   -- espaço reservado para as quadras
+			
+			-- Desempenho por piso (ignora o clique nas quadras, para mostrar sempre os três)
+			VAR PctH = CALCULATE ( [4.%Vitorias], d_Torneios[superficie] = "Hard" )
+			VAR PctC = CALCULATE ( [4.%Vitorias], d_Torneios[superficie] = "Clay" )
+			VAR PctG = CALCULATE ( [4.%Vitorias], d_Torneios[superficie] = "Grass" )
+			VAR RecH = CALCULATE ( [1.Vitorias], d_Torneios[superficie] = "Hard" ) + 0 & "V – " & CALCULATE ( [2.Derrotas], d_Torneios[superficie] = "Hard" ) + 0 & "D"
+			VAR RecC = CALCULATE ( [1.Vitorias], d_Torneios[superficie] = "Clay" ) + 0 & "V – " & CALCULATE ( [2.Derrotas], d_Torneios[superficie] = "Clay" ) + 0 & "D"
+			VAR RecG = CALCULATE ( [1.Vitorias], d_Torneios[superficie] = "Grass" ) + 0 & "V – " & CALCULATE ( [2.Derrotas], d_Torneios[superficie] = "Grass" ) + 0 & "D"
+			
+			-- Destaque: a quadra clicada; sem clique, o melhor piso
+			VAR Melhor =
+			    SWITCH ( TRUE (),
+			        PctG >= PctH && PctG >= PctC, "Grass",
+			        PctC >= PctH, "Clay",
+			        "Hard"
+			    )
+			VAR Destaque =
+			    IF ( ISFILTERED ( d_Torneios[superficie] ), SELECTEDVALUE ( d_Torneios[superficie] ), Melhor )
+			
+			-- Modelo de coluna
+			VAR Coluna =
+			    "<div style=""flex:1;text-align:center;"">"
+			        & "<div style=""" & sRotulo & """>%NOME%</div>"
+			        & "<div style=""%ESTILO%"">%PCT%</div>"
+			        & "<div style=""" & sContexto & """>%REC%</div>"
+			        & "<div style=""width:72px;height:4px;border-radius:2px;margin:6px auto 0 auto;background:%BARRA%;""></div>"
+			    & "</div>"
+			
+			VAR ColH = SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Coluna,
+			    "%NOME%", "Dura" ),
+			    "%ESTILO%", IF ( Destaque = "Hard", sDestaque, sValor ) ),
+			    "%PCT%", IF ( ISBLANK ( PctH ), "—", FORMAT ( PctH, "0.0%" ) ) ),
+			    "%REC%", RecH ),
+			    "%BARRA%", IF ( Destaque = "Hard", "#C8D646", "transparent" ) )
+			
+			VAR ColC = SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Coluna,
+			    "%NOME%", "Saibro" ),
+			    "%ESTILO%", IF ( Destaque = "Clay", sDestaque, sValor ) ),
+			    "%PCT%", IF ( ISBLANK ( PctC ), "—", FORMAT ( PctC, "0.0%" ) ) ),
+			    "%REC%", RecC ),
+			    "%BARRA%", IF ( Destaque = "Clay", "#C8D646", "transparent" ) )
+			
+			VAR ColG = SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( SUBSTITUTE ( Coluna,
+			    "%NOME%", "Grama" ),
+			    "%ESTILO%", IF ( Destaque = "Grass", sDestaque, sValor ) ),
+			    "%PCT%", IF ( ISBLANK ( PctG ), "—", FORMAT ( PctG, "0.0%" ) ) ),
+			    "%REC%", RecG ),
+			    "%BARRA%", IF ( Destaque = "Grass", "#C8D646", "transparent" ) )
+			
+			RETURN
+			    IF (
+			        HASONEVALUE ( d_Jogadores[id_jogador] ),
+			        "<div style=""padding:6px 10px;"">"
+			            & "<div style=""" & sTitulo & """>Desempenho por superfície</div>"
+			            & "<div style=""" & sSubtitulo & """>Clique em uma quadra para filtrar a página</div>"
+			            & "<div style=""height:" & AlturaQuadras & "px;""></div>"
+			            & "<div style=""display:flex;"">" & ColH & ColC & ColG & "</div>"
+			        & "</div>"
+			    )
+		displayFolder: 6.Cartoes HTML
+		lineageTag: 2796581e-adf8-4ffc-8841-87230fcf0d6a
+
+	measure '% Pontos Ganhos no Saque' =
+			
+			DIVIDE (
+			    [Pontos Ganhos 1º Saque] + [Pontos Ganhos 2º Saque],
+			    [Pontos disputados no saque]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 3. Estatisticas Jogador
+		lineageTag: 3d921ae3-7ba2-4889-8f01-f8f32247c72d
+
+	measure 'Trajetoria Ano' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( d_MetricaTrajetoria[metrica], "Vitórias" ),
+			    "Vitórias",       [1.Vitorias],
+			    "% Vitórias",     [4.%Vitorias],
+			    "% Pts no saque", [% Pontos Ganhos no Saque],
+			    "Aces/partida",   [14.Aces por Partida]
+			)
+		lineageTag: 516a54fd-6806-46c9-8a45-de3dee32c190
+
+		formatStringDefinition =
+				SWITCH (
+				    SELECTEDVALUE ( d_MetricaTrajetoria[metrica], "Vitórias" ),
+				    "Vitórias",       "#,0",
+				    "% Vitórias",     "0.0%",
+				    "% Pts no saque", "0.0%",
+				    "Aces/partida",   "0.0"
+				)
+
+	measure 'Trajetoria Acumulado' =
+			
+			VAR DataFinal = MAX ( d_Calendario[Data] )
+			VAR Estreia =
+			    MIN (
+			        CALCULATE ( MIN ( f_Resultados_Gold[data_torneio] ), REMOVEFILTERS ( d_Calendario ) ),
+			        CALCULATE (
+			            MIN ( f_Resultados_Gold[data_torneio] ),
+			            USERELATIONSHIP ( d_Jogadores[id_jogador], f_Resultados_Gold[id_perdedor] ),
+			            REMOVEFILTERS ( d_Calendario )
+			        )
+			    )
+			RETURN
+			    IF (
+			        DataFinal >= Estreia,
+			        CALCULATE (
+			            [Trajetoria Ano],
+			            REMOVEFILTERS ( d_Calendario ),
+			            d_Calendario[Data] <= DataFinal
+			        )
+			    )
+		lineageTag: 86f29b72-9d74-46ce-a421-98ec6c2be4ac
+
+		formatStringDefinition =
+				SWITCH (
+				    SELECTEDVALUE ( d_MetricaTrajetoria[metrica], "Vitórias" ),
+				    "Vitórias",       "#,0",
+				    "% Vitórias",     "0.0%",
+				    "% Pts no saque", "0.0%",
+				    "Aces/partida",   "0.0"
+				)
+
+	measure 'Titulo Trajetoria' =
+			
+			VAR Metrica = SELECTEDVALUE ( d_MetricaTrajetoria[metrica], "Vitórias" )
+			VAR Anos =
+			    FILTER (
+			        ADDCOLUMNS ( VALUES ( d_Calendario[Ano] ), "@v", [Trajetoria Ano], "@p", [3.Partidas] ),
+			        NOT ISBLANK ( [@v] ) && [@p] >= 10
+			    )
+			VAR Melhor   = TOPN ( 1, Anos, [@v], DESC )
+			VAR AnoTop   = MAXX ( Melhor, d_Calendario[Ano] )
+			VAR ValorTop = MAXX ( Melhor, [@v] )
+			VAR ValorTxt =
+			    SWITCH (
+			        Metrica,
+			        "Vitórias",       FORMAT ( ValorTop, "#,0" ) & " vitórias",
+			        "% Vitórias",     FORMAT ( ValorTop, "0.0%" ) & " de vitórias",
+			        "% Pts no saque", FORMAT ( ValorTop, "0.0%" ) & " dos pontos no saque",
+			        "Aces/partida",   FORMAT ( ValorTop, "0.0" ) & " aces por partida"
+			    )
+			RETURN
+			    IF (
+			        ISEMPTY ( Anos ),
+			        Metrica & " por temporada",
+			        "Melhor temporada: " & AnoTop & ", com " & ValorTxt
+			    )
+		lineageTag: c55d69fe-c132-4176-afe2-845e1232689e
+
+	measure 'Subtitulo Trajetoria' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( d_MetricaTrajetoria[metrica], "Vitórias" ),
+			    "Vitórias",       "Barras: vitórias no ano · Linha: total acumulado desde 2015",
+			    "% Vitórias",     "Barras: % no ano · Linha: % acumulado da carreira até o ano",
+			    "% Pts no saque", "Barras: % no ano · Linha: % acumulado da carreira até o ano",
+			    "Aces/partida",   "Barras: média no ano · Linha: média da carreira até o ano"
+			)
+		lineageTag: d58c2531-24ed-497f-bd9a-fb14d4f91a24
+
+	measure '5.HTML Titulo Trajetoria' =
+			
+			"<div style=""padding:6px 10px;"">"
+			    & "<div style=""font-family:'Segoe UI Semibold','Segoe UI',sans-serif;font-weight:600;font-size:17px;color:#333333;"">" & [Titulo Trajetoria] & "</div>"
+			    & "<div style=""font-family:'Segoe UI',sans-serif;font-size:12px;color:#767676;"">" & [Subtitulo Trajetoria] & "</div>"
+			& "</div>"
+		lineageTag: 86acf558-9c5b-4e01-a332-f36617c2ab13
+
+	partition **MEDIDAS** = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Colunas Removidas" = Table.RemoveColumns(Fonte,{"Coluna 1"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_ResultType = Table
+

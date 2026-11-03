@@ -1,0 +1,89 @@
+table d_Calendario
+	lineageTag: 132647a7-4161-4c62-8eb2-d2f71d0821d7
+
+	column Data
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 63100177-cdea-43a7-b32b-5ea713fbb9a6
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e698773-9342-4c27-aa30-a08da17e9dec
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = User
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 49fb3f20-c710-4602-808d-9b0291a66c3f
+		summarizeBy: none
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = User
+
+	column NomeMes
+		dataType: string
+		lineageTag: 86375a55-582d-4847-a53f-d468fbfbc979
+		summarizeBy: none
+		sourceColumn: NomeMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaMes
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ba20058-f49a-490d-9ca0-5c510c4a7370
+		summarizeBy: none
+		sourceColumn: DiaMes
+
+		annotation SummarizationSetBy = User
+
+	partition d_Calendario = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    AnoInicial = 2014,
+				    AnoFinal   = Date.Year(DateTime.LocalNow()), //Depende do contexto. Nesse caso pega o ano atual, mas se precisar de data futura o ano deve ser indicado
+				
+				    DataInicial = Date.StartOfYear(#date(AnoInicial, 1, 1)),
+				    DataFinal   = Date.EndOfYear(#date(AnoFinal, 12, 31)),
+				
+				    Calendario = Table.FromList(
+				        List.Dates(DataInicial, Duration.Days(DataFinal - DataInicial) + 1, #duration(1,0,0,0)),
+				        Splitter.SplitByNothing(),
+				        {"Data"},
+				        null,
+				        ExtraValues.Error
+				    ),
+				    AlteraTipo = Table.TransformColumnTypes(Calendario, {{"Data", type date}}),
+				
+				    Colunas = {
+				        {"Ano",             each Date.Year([Data]),                       Int64.Type},
+				        {"Mes",             each Date.Month([Data]),                      Int64.Type},
+				        {"NomeMes",        each Text.Proper(Date.MonthName([Data])),     type text},
+				        {"DiaMes",         each Date.Day([Data]),                        Int64.Type}
+				
+				    },
+				
+				    Resultado = List.Accumulate(
+				        Colunas,
+				        AlteraTipo,
+				        (tabela, col) => Table.AddColumn(tabela, col{0}, col{1}, col{2})
+				    )
+				in
+				    Resultado
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

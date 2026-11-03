@@ -1,0 +1,144 @@
+table d_Jogadores
+	lineageTag: 2a43beff-3884-4f13-a17c-d74a528158ce
+
+	column id_jogador
+		dataType: int64
+		formatString: 0
+		lineageTag: 87ef54da-e945-41ba-8d9e-a3c7f6080d3a
+		summarizeBy: none
+		sourceColumn: id_jogador
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_jogador
+		dataType: string
+		lineageTag: e5317abe-dfba-4487-9deb-946f9bef1b00
+		summarizeBy: none
+		sourceColumn: nome_jogador
+
+		annotation SummarizationSetBy = Automatic
+
+	column mao
+		dataType: string
+		lineageTag: 2956eb7d-5b43-481b-a7bd-48d925910282
+		summarizeBy: none
+		sourceColumn: mao
+
+		annotation SummarizationSetBy = Automatic
+
+	column altura
+		dataType: int64
+		formatString: 0
+		lineageTag: b21a8d74-aa9b-4beb-9999-5028414d20e9
+		summarizeBy: none
+		sourceColumn: altura
+
+		annotation SummarizationSetBy = User
+
+	column pais
+		dataType: string
+		lineageTag: 4549a47f-09fc-4fd7-aaac-925fa438549f
+		summarizeBy: none
+		sourceColumn: pais
+
+		annotation SummarizationSetBy = Automatic
+
+	column rotulo_jogador =
+			
+			
+			VAR r = RELATED(d_Top100[ranking_atual])
+			
+			RETURN
+			    IF(
+			        ISBLANK(r), d_Jogadores[nome_jogador], "#" & r & " " & d_Jogadores[nome_jogador])
+		lineageTag: 075fbdca-4926-445f-baa6-852cf1728f28
+		summarizeBy: none
+		sortByColumn: ordem_jogador
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordem_jogador = ```
+			
+			
+			VAR r = RELATED(d_Top100[ranking_atual])
+			
+			RETURN
+			    IF( 
+			        ISBLANK(r), 999, r)
+			```
+		formatString: 0
+		lineageTag: bdc197d0-d785-4b6d-b63a-66acb87cf497
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column url_foto =
+			
+			
+			RELATED(d_Top100[url_foto])
+		lineageTag: 1a234784-364f-48b4-8103-2b22c8a89eea
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column pais_nome
+		dataType: string
+		lineageTag: c4b057cd-5db1-426a-8a21-c74c80da4bc7
+		summarizeBy: none
+		sourceColumn: pais_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column url_bandeira
+		dataType: string
+		lineageTag: bf756fa3-8807-47a2-aedf-568232d54625
+		summarizeBy: none
+		sourceColumn: url_bandeira
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_Jogadores = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Origem = f_Resultados_Silver,
+				
+				    Vencedores = Table.RenameColumns(
+				        Table.SelectColumns(Origem, {"id_vencedor", "nome_vencedor", "mao_vencedor", "altura_vencedor", "pais_vencedor"}),
+				        {
+				            {"id_vencedor",     "id_jogador"},
+				            {"nome_vencedor",   "nome_jogador"},
+				            {"mao_vencedor",    "mao"},
+				            {"altura_vencedor", "altura"},
+				            {"pais_vencedor",   "pais"}
+				        }
+				    ),
+				
+				    Perdedores = Table.RenameColumns(
+				        Table.SelectColumns(Origem, {"id_perdedor", "nome_perdedor", "mao_perdedor", "altura_perdedor", "pais_perdedor"}),
+				        {
+				            {"id_perdedor",     "id_jogador"},
+				            {"nome_perdedor",   "nome_jogador"},
+				            {"mao_perdedor",    "mao"},
+				            {"altura_perdedor", "altura"},
+				            {"pais_perdedor",   "pais"}
+				        }
+				    ),
+				
+				    Jogadores = Table.Combine({Vencedores, Perdedores}),
+				    #"Jogadores únicos" = Table.Distinct(Jogadores, {"id_jogador"}),
+				
+				    // País em português e bandeira
+				    #"Mesclar países" = Table.NestedJoin(#"Jogadores únicos", {"pais"}, d_Paises, {"pais"}, "paises", JoinKind.LeftOuter),
+				    #"Expandir países" = Table.ExpandTableColumn(#"Mesclar países", "paises", {"pais_nome", "url_bandeira"}),
+				    #"Tipos países" = Table.TransformColumnTypes(#"Expandir países", {{"pais_nome", type text}, {"url_bandeira", type text}})
+				in
+				    #"Tipos países"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

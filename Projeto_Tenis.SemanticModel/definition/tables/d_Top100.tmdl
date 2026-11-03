@@ -1,0 +1,169 @@
+table d_Top100
+	lineageTag: 728ed477-0fa0-49e2-a69c-effdcfb7938d
+
+	column ranking_atual
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e93a236-5b01-4887-8714-7b8ea419eaca
+		summarizeBy: none
+		sourceColumn: ranking_atual
+
+		annotation SummarizationSetBy = User
+
+	column id_jogador
+		dataType: int64
+		formatString: 0
+		lineageTag: 47e97320-b796-43bf-a3eb-e80db2d2a368
+		summarizeBy: none
+		sourceColumn: id_jogador
+
+		annotation SummarizationSetBy = Automatic
+
+	column pontos_atual
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e155e5b-feeb-40c6-a3b7-863640130db6
+		summarizeBy: none
+		sourceColumn: pontos_atual
+
+		annotation SummarizationSetBy = User
+
+	column codigo_atp
+		dataType: string
+		lineageTag: d3243f03-37d4-4aa0-b7af-e73d7c1b15e7
+		summarizeBy: none
+		sourceColumn: codigo_atp
+
+		annotation SummarizationSetBy = Automatic
+
+	column url_foto
+		dataType: string
+		lineageTag: fce12358-5973-4c2c-b53b-fbff2b261075
+		summarizeBy: none
+		sourceColumn: url_foto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_Top100 = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Dados = #table(
+				        type table [ranking_atual = Int64.Type, id_jogador = Int64.Type, pontos_atual = Int64.Type, codigo_atp = text],
+				        {
+				        {1, 206173, 10950, "s0ag"},
+				        {2, 100644, 10070, "z355"},
+				        {3, 207989, 5610, "a0e2"},
+				        {4, 210097, 4720, "s0s1"},
+				        {5, 106421, 3660, "mm58"},
+				        {6, 207925, 3640, "c0e9"},
+				        {7, 200000, 3590, "ag37"},
+				        {8, 200282, 3430, "dh58"},
+				        {9, 126207, 3380, "td51"},
+				        {10, 209950, 3325, "f0f1"},
+				        {11, 212588, 3234, "j0dz"},
+				        {12, 104925, 3090, "d643"},
+				        {13, 200221, 2880, "dh50"},
+				        {14, 126203, 2880, "fb98"},
+				        {15, 126205, 2575, "pl56"},
+				        {16, 210150, 2500, "m0ni"},
+				        {17, 206909, 2375, "n0ae"},
+				        {18, 210530, 2345, "t0ha"},
+				        {19, 122330, 2275, "bk92"},
+				        {20, 208103, 2235, "l0bv"},
+				        {21, 202103, 2220, "c0au"},
+				        {22, 126094, 2175, "re44"},
+				        {23, 209260, 2160, "d0fj"},
+				        {24, 134770, 2095, "rh16"},
+				        {25, 111575, 1990, "ke29"},
+				        {26, 207518, 1870, "m0ej"},
+				        {27, 210696, 1790, "b0pg"},
+				        {28, 211663, 1750, "f0fv"},
+				        {29, 144869, 1590, "ea24"},
+				        {30, 128034, 1575, "hb71"},
+				        {31, 126214, 1565, "te30"},
+				        {32, 200473, 1480, "va25"},
+				        {33, 209860, 1445, "b0id"},
+				        {34, 209259, 1421, "f0dm"},
+				        {35, 200005, 1420, "hh26"},
+				        {36, 208286, 1386, "a0fc"},
+				        {37, 210506, 1370, "m0qi"},
+				        {38, 122298, 1333, "v812"},
+				        {39, 126774, 1330, "te51"},
+				        {40, 111815, 1235, "n771"},
+				        {41, 200267, 1220, "bu13"},
+				        {42, 210017, 1195, "m0n7"},
+				        {43, 126610, 1173, "bk40"},
+				        {44, 210338, 1160, "g0ix"},
+				        {45, 208363, 1151, "n0bs"},
+				        {46, 111460, 1127, "hb64"},
+				        {47, 133430, 1105, "su55"},
+				        {48, 209414, 1065, "v0dz"},
+				        {49, 202104, 1044, "b0bi"},
+				        {50, 202058, 1032, "t0a1"},
+				        {51, 144719, 1010, "mu94"},
+				        {52, 132686, 1000, "bt72"},
+				        {53, 207678, 1000, "c0c8"},
+				        {54, 209226, 997, "v0dp"},
+				        {55, 209920, 978, "c0jp"},
+				        {56, 210262, 941, "f0f2"},
+				        {57, 200175, 930, "ki95"},
+				        {58, 105526, 929, "sl28"},
+				        {59, 105870, 923, "h997"},
+				        {60, 134868, 885, "gj37"},
+				        {61, 126239, 870, "rc91"},
+				        {62, 208882, 869, "b0fv"},
+				        {63, 210319, 864, "q02l"},
+				        {64, 206681, 860, "m0ci"},
+				        {65, 127157, 849, "ae14"},
+				        {66, 200240, 844, "ki82"},
+				        {67, 212021, 822, "l0il"},
+				        {68, 208233, 812, "b0gg"},
+				        {69, 208169, 801, "d0dw"},
+				        {70, 126128, 794, "sx50"},
+				        {71, 207680, 790, "d0cg"},
+				        {72, 207830, 779, "m0fh"},
+				        {73, 105902, 774, "d994"},
+				        {74, 105807, 773, "cd85"},
+				        {75, 200116, 770, "u182"},
+				        {76, 209098, 764, "m0jf"},
+				        {77, 208260, 759, "s0k7"},
+				        {78, 111794, 750, "mq75"},
+				        {79, 105173, 743, "me82"},
+				        {80, 144684, 734, "mv14"},
+				        {81, 200624, 730, "k0ah"},
+				        {82, 206499, 715, "k0az"},
+				        {83, 106000, 712, "d923"},
+				        {84, 105227, 704, "c977"},
+				        {85, 208021, 703, "j0az"},
+				        {86, 208014, 689, "h0bh"},
+				        {87, 207985, 686, "f0by"},
+				        {88, 106218, 676, "gc88"},
+				        {89, 132283, 658, "su87"},
+				        {90, 105477, 657, "ta29"},
+				        {91, 207352, 652, "y09v"},
+				        {92, 209409, 642, "w0bh"},
+				        {93, 200384, 641, "g09o"},
+				        {94, 144895, 640, "mw02"},
+				        {95, 209976, 638, "p0hw"},
+				        {96, 210389, 625, "s0tm"},
+				        {97, 200443, 619, "w09e"},
+				        {98, 209279, 616, "a0gc"},
+				        {99, 202385, 613, "b0cd"},
+				        {100, 126127, null, "bm95"}
+				        }
+				    ),
+				    #"URL foto" = Table.AddColumn(
+				        Dados,
+				        "url_foto",
+				        each "https://www.atptour.com/-/media/alias/player-headshot/" & [codigo_atp],
+				        type text
+				    )
+				in
+				    #"URL foto"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

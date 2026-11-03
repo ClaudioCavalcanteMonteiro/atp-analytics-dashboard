@@ -1,0 +1,358 @@
+expression f_Resultados_Raw =
+		let
+		    Anos = {2015..2026},
+		    LerAno = (ano as number) =>
+		        let
+		            Fonte = Web.Contents(
+		                "https://raw.githubusercontent.com",
+		                [RelativePath = "Aneeshers/tennis-sackmann-archive/main/atp/atp_matches_" & Text.From(ano) & ".csv"]
+		            ),
+		            Csv = Csv.Document(Fonte, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		            Cab = Table.PromoteHeaders(Csv, [PromoteAllScalars = true])
+		        in
+		            Cab,
+		    Combinado = Table.Combine(List.Transform(Anos, LerAno))
+		in
+		    Combinado
+	lineageTag: c6172449-43ef-403d-abeb-c5cc625badc6
+	queryGroup: RAW
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression f_Resultados_Silver =
+		let
+		    // Funções auxiliares
+		    fxExisteColuna = (Tabela as table, Coluna as text) as logical =>
+		        List.Contains(Table.ColumnNames(Tabela), Coluna),
+		
+		    fxTipoSeguro =
+		        (
+		            Tabela as table,
+		            Coluna as text,
+		            Tipo as type,
+		            optional Cultura as nullable text
+		        ) =>
+		        if fxExisteColuna(Tabela, Coluna)
+		        then
+		            Table.TransformColumnTypes(
+		                Tabela,
+		                {{Coluna, Tipo}},
+		                if Cultura = null then "pt-BR" else Cultura
+		            )
+		        else
+		            Tabela,
+		
+		    Origem = f_Resultados_Raw,
+		    #"Linhas filtradas" = Table.SelectRows(Origem, each [tourney_level] = "A" or [tourney_level] = "G" or [tourney_level] = "M" or [tourney_level] = "F"),
+		
+		    // 1. Aparar espaços e caracteres invisíveis em todas as colunas
+		    #"Texto aparado" = Table.TransformColumns(
+		        #"Linhas filtradas",
+		        List.Transform(Table.ColumnNames(#"Linhas filtradas"), each {_, (v) => if v is text then Text.Trim(Text.Clean(v)) else v})
+		    ),
+		
+		    // 2. Manter apenas torneios que pontuam no ranking ATP
+		    SemPontos = {"Laver Cup", "NextGen Finals", "Rio Olympics", "Tokyo Olympics"},
+		    #"Torneios que pontuam" = Table.SelectRows(#"Texto aparado", each not List.Contains(SemPontos, [tourney_name])),
+		
+		    // 3. Texto vazio vira null
+		    #"Vazios para null" = Table.ReplaceValue(#"Torneios que pontuam", "", null, Replacer.ReplaceValue, Table.ColumnNames(#"Torneios que pontuam")),
+		
+		    // 4. Limpar nome do torneio (mantém números: Adelaide 1, Adelaide 2...)
+		    NomesCorrigidos = [
+		        #"Rio De Janeiro"  = "Rio de Janeiro",
+		        #"Atp Cup"         = "ATP Cup",
+		        #"s Hertogenbosch" = "'s-Hertogenbosch"
+		        // , #"Nur-Sultan" = "Astana"   // opcional: mesma cidade
+		    ],
+		    LimparNome = (nome as text) as text =>
+		        let
+		            Aparado   = Text.Trim(Text.Clean(nome)),
+		            SemATP    = if Text.StartsWith(Aparado, "ATP ") then Text.Range(Aparado, 4) else Aparado,
+		            SemPonto  = Text.Replace(SemATP, ".", ""),
+		            Espacos   = Text.Combine(List.Select(Text.Split(SemPonto, " "), each _ <> ""), " "),
+		            Corrigido = Record.FieldOrDefault(NomesCorrigidos, Espacos, Espacos)
+		        in
+		            Corrigido,
+		
+		    // 5. Padronizar códigos de entrada
+		    PadronizarEntry = (v) => if v = null then null else Record.FieldOrDefault([Alt = "ALT", W = "WC", S = "SE", L = "LL"], v, v),
+		
+		    // 6. Corrigir valores
+		    #"Valores padronizados" = Table.TransformColumns(
+		        #"Vazios para null",
+		        {
+		            {"tourney_name", LimparNome},
+		            {"winner_entry", PadronizarEntry},
+		            {"loser_entry", PadronizarEntry},
+		            {"winner_id", each if _ = "211776" then "212021" else _},
+		            {"loser_id",  each if _ = "211776" then "212021" else _},
+		            {"winner_name", each if _ = "Alejandro Gomez Gb42" then "Alejandro Gomez" else _},
+		            {"loser_name",  each if _ = "Alejandro Gomez Gb42" then "Alejandro Gomez" else _},
+		            {"winner_ioc", each if _ = "LBN" then "LIB" else _},
+		            {"loser_ioc",  each if _ = "LBN" then "LIB" else _},
+		            {"winner_hand", each if _ = "U" then null else _},
+		            {"loser_hand",  each if _ = "U" then null else _},
+		            {"score", each if _ = null then null else Text.Replace(_, "Def.", "DEF")},
+		            {"minutes", each if _ <> null and Number.From(_) > 300 then null else _}
+		        }
+		    ),
+		
+		    // 7. W.O.: partida não jogada não tem duração nem estatísticas
+		    ColunasWO = {"minutes"} & List.Combine(List.Transform({"w_", "l_"}, (p) =>
+		        List.Transform({"ace", "df", "svpt", "1stIn", "1stWon", "2ndWon", "SvGms", "bpSaved", "bpFaced"}, (s) => p & s))),
+		    #"W.O. sem estatisticas" = Table.ReplaceValue(
+		        #"Valores padronizados",
+		        each [score] = "W/O",
+		        null,
+		        (valor, ehWO, novo) => if ehWO then novo else valor,
+		        ColunasWO
+		    ),
+		
+		    // 8. Renomear colunas para português
+		    #"Colunas renomeadas" = Table.RenameColumns(
+		        #"W.O. sem estatisticas",
+		        {
+		            // Torneio e partida
+		            {"tourney_id",     "id_torneio"},
+		            {"tourney_name",   "nome_torneio"},
+		            {"surface",        "superficie"},
+		            {"draw_size",      "tamanho_chave"},
+		            {"tourney_level",  "nivel_torneio"},
+		            {"tourney_date",   "data_torneio"},
+		            {"match_num",      "num_partida"},
+		            {"score",          "placar"},
+		            {"best_of",        "melhor_de"},
+		            {"round",          "rodada"},
+		            {"minutes",        "minutos"},
+		
+		            // Vencedor
+		            {"winner_id",          "id_vencedor"},
+		            {"winner_seed",        "cabeca_chave_vencedor"},
+		            {"winner_entry",       "entrada_vencedor"},
+		            {"winner_name",        "nome_vencedor"},
+		            {"winner_hand",        "mao_vencedor"},
+		            {"winner_ht",          "altura_vencedor"},
+		            {"winner_ioc",         "pais_vencedor"},
+		            {"winner_age",         "idade_vencedor"},
+		            {"winner_rank",        "ranking_vencedor"},
+		            {"winner_rank_points", "pontos_ranking_vencedor"},
+		
+		            // Perdedor
+		            {"loser_id",          "id_perdedor"},
+		            {"loser_seed",        "cabeca_chave_perdedor"},
+		            {"loser_entry",       "entrada_perdedor"},
+		            {"loser_name",        "nome_perdedor"},
+		            {"loser_hand",        "mao_perdedor"},
+		            {"loser_ht",          "altura_perdedor"},
+		            {"loser_ioc",         "pais_perdedor"},
+		            {"loser_age",         "idade_perdedor"},
+		            {"loser_rank",        "ranking_perdedor"},
+		            {"loser_rank_points", "pontos_ranking_perdedor"},
+		
+		            // Estatísticas do vencedor
+		            {"w_ace",     "aces_vencedor"},
+		            {"w_df",      "duplas_faltas_vencedor"},
+		            {"w_svpt",    "pontos_saque_vencedor"},
+		            {"w_1stIn",   "primeiro_saque_dentro_vencedor"},
+		            {"w_1stWon",  "pontos_ganhos_primeiro_saque_vencedor"},
+		            {"w_2ndWon",  "pontos_ganhos_segundo_saque_vencedor"},
+		            {"w_SvGms",   "games_saque_vencedor"},
+		            {"w_bpSaved", "break_points_salvos_vencedor"},
+		            {"w_bpFaced", "break_points_enfrentados_vencedor"},
+		
+		            // Estatísticas do perdedor
+		            {"l_ace",     "aces_perdedor"},
+		            {"l_df",      "duplas_faltas_perdedor"},
+		            {"l_svpt",    "pontos_saque_perdedor"},
+		            {"l_1stIn",   "primeiro_saque_dentro_perdedor"},
+		            {"l_1stWon",  "pontos_ganhos_primeiro_saque_perdedor"},
+		            {"l_2ndWon",  "pontos_ganhos_segundo_saque_perdedor"},
+		            {"l_SvGms",   "games_saque_perdedor"},
+		            {"l_bpSaved", "break_points_salvos_perdedor"},
+		            {"l_bpFaced", "break_points_enfrentados_perdedor"}
+		        }
+		    ),
+		
+		    // 9. Perfil da partida (derivado do placar)
+		    fxTipoTermino = (placar as nullable text) as nullable text =>
+		        if placar = null then null
+		        else if Text.Contains(placar, "W/O") then "W.O."
+		        else if Text.Contains(placar, "RET") then "Abandono"
+		        else if Text.Contains(placar, "DEF") then "Desclassificação"
+		        else "Normal",
+		
+		    fxSets = (placar as nullable text) as list =>
+		        if placar = null then {}
+		        else List.Select(
+		            Text.Split(placar, " "),
+		            each Text.Length(_) > 0 and List.Contains({"0".."9"}, Text.Start(_, 1))
+		        ),
+		
+		    #"Tipo termino" = Table.AddColumn(#"Colunas renomeadas", "tipo_termino", each fxTipoTermino([placar])),
+		    #"Num sets" = Table.AddColumn(#"Tipo termino", "num_sets", each List.Count(fxSets([placar]))),
+		    #"Num tiebreaks" = Table.AddColumn(#"Num sets", "num_tiebreaks", each
+		        List.Count(List.Select(fxSets([placar]), (s) => Text.StartsWith(s, "7-6") or Text.StartsWith(s, "6-7")))
+		    ),
+		    #"Perfil da partida" = Table.AddColumn(#"Num tiebreaks", "id_perfil_partida", each
+		        [tipo_termino] & "|" & Text.From([num_sets]) & "|" & Text.From([num_tiebreaks])
+		    ),
+		
+		    // 10. Data: yyyyMMdd → date
+		    DatasSeguras =
+		        if fxExisteColuna(#"Perfil da partida", "data_torneio")
+		        then
+		            Table.TransformColumns(
+		                #"Perfil da partida",
+		                {{"data_torneio", each if _ = null then null else Date.FromText(Text.From(_), [Format = "yyyyMMdd"]), type date}}
+		            )
+		        else
+		            #"Perfil da partida",
+		
+		    // 11. Tipagem: {coluna, tipo, cultura opcional}
+		    ColunasTexto = {
+		        "id_torneio", "nome_torneio", "superficie", "nivel_torneio", "placar", "rodada",
+		        "tipo_termino", "id_perfil_partida",
+		        "entrada_vencedor", "nome_vencedor", "mao_vencedor", "pais_vencedor",
+		        "entrada_perdedor", "nome_perdedor", "mao_perdedor", "pais_perdedor"
+		    },
+		    ColunasInteiro = {
+		        "tamanho_chave", "num_partida", "melhor_de", "minutos", "num_sets", "num_tiebreaks",
+		        "id_vencedor", "cabeca_chave_vencedor", "altura_vencedor", "ranking_vencedor", "pontos_ranking_vencedor",
+		        "id_perdedor", "cabeca_chave_perdedor", "altura_perdedor", "ranking_perdedor", "pontos_ranking_perdedor",
+		        "aces_vencedor", "duplas_faltas_vencedor", "pontos_saque_vencedor", "primeiro_saque_dentro_vencedor",
+		        "pontos_ganhos_primeiro_saque_vencedor", "pontos_ganhos_segundo_saque_vencedor", "games_saque_vencedor",
+		        "break_points_salvos_vencedor", "break_points_enfrentados_vencedor",
+		        "aces_perdedor", "duplas_faltas_perdedor", "pontos_saque_perdedor", "primeiro_saque_dentro_perdedor",
+		        "pontos_ganhos_primeiro_saque_perdedor", "pontos_ganhos_segundo_saque_perdedor", "games_saque_perdedor",
+		        "break_points_salvos_perdedor", "break_points_enfrentados_perdedor"
+		    },
+		    Tipos =
+		        List.Transform(ColunasTexto,   each {_, type text})
+		        & List.Transform(ColunasInteiro, each {_, Int64.Type})
+		        & {
+		            {"data_torneio",    type date},
+		            {"idade_vencedor",  type number, "en-US"},
+		            {"idade_perdedor",  type number, "en-US"}
+		        },
+		
+		    TiposAplicados =
+		        List.Accumulate(
+		            Tipos,
+		            DatasSeguras,
+		            (Estado, Atual) =>
+		                fxTipoSeguro(
+		                    Estado,
+		                    Atual{0},
+		                    Atual{1},
+		                    Atual{2}?
+		                )
+		        )
+		in
+		    TiposAplicados
+	lineageTag: 2f16649a-236f-4ff2-99e6-51e87b7d3cb6
+	queryGroup: Silver
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression d_Paises =
+		let
+		    Dados = #table(
+		        type table [pais = text, codigo_iso = text, pais_nome = text],
+		        {
+		            {"ALG", "dz", "Argélia"},
+		            {"ARG", "ar", "Argentina"},
+		            {"AUS", "au", "Austrália"},
+		            {"AUT", "at", "Áustria"},
+		            {"BAR", "bb", "Barbados"},
+		            {"BEL", "be", "Bélgica"},
+		            {"BIH", "ba", "Bósnia e Herzegovina"},
+		            {"BLR", "by", "Belarus"},
+		            {"BOL", "bo", "Bolívia"},
+		            {"BRA", "br", "Brasil"},
+		            {"BUL", "bg", "Bulgária"},
+		            {"CAN", "ca", "Canadá"},
+		            {"CHI", "cl", "Chile"},
+		            {"CHN", "cn", "China"},
+		            {"COL", "co", "Colômbia"},
+		            {"CRO", "hr", "Croácia"},
+		            {"CYP", "cy", "Chipre"},
+		            {"CZE", "cz", "Tchéquia"},
+		            {"DEN", "dk", "Dinamarca"},
+		            {"DOM", "do", "República Dominicana"},
+		            {"ECU", "ec", "Equador"},
+		            {"EGY", "eg", "Egito"},
+		            {"ESA", "sv", "El Salvador"},
+		            {"ESP", "es", "Espanha"},
+		            {"EST", "ee", "Estônia"},
+		            {"FIN", "fi", "Finlândia"},
+		            {"FRA", "fr", "França"},
+		            {"GBR", "gb", "Reino Unido"},
+		            {"GEO", "ge", "Geórgia"},
+		            {"GER", "de", "Alemanha"},
+		            {"GRE", "gr", "Grécia"},
+		            {"HKG", "hk", "Hong Kong"},
+		            {"HUN", "hu", "Hungria"},
+		            {"IND", "in", "Índia"},
+		            {"IRL", "ie", "Irlanda"},
+		            {"ISR", "il", "Israel"},
+		            {"ITA", "it", "Itália"},
+		            {"JAM", "jm", "Jamaica"},
+		            {"JOR", "jo", "Jordânia"},
+		            {"JPN", "jp", "Japão"},
+		            {"KAZ", "kz", "Cazaquistão"},
+		            {"KOR", "kr", "Coreia do Sul"},
+		            {"LAT", "lv", "Letônia"},
+		            {"LIB", "lb", "Líbano"},
+		            {"LTU", "lt", "Lituânia"},
+		            {"LUX", "lu", "Luxemburgo"},
+		            {"MAR", "ma", "Marrocos"},
+		            {"MDA", "md", "Moldávia"},
+		            {"MEX", "mx", "México"},
+		            {"MON", "mc", "Mônaco"},
+		            {"NED", "nl", "Países Baixos"},
+		            {"NOR", "no", "Noruega"},
+		            {"NZL", "nz", "Nova Zelândia"},
+		            {"PAR", "py", "Paraguai"},
+		            {"PER", "pe", "Peru"},
+		            {"POL", "pl", "Polônia"},
+		            {"POR", "pt", "Portugal"},
+		            {"QAT", "qa", "Catar"},
+		            {"ROU", "ro", "Romênia"},
+		            {"RSA", "za", "África do Sul"},
+		            {"RUS", "ru", "Rússia"},
+		            {"SLO", "si", "Eslovênia"},
+		            {"SRB", "rs", "Sérvia"},
+		            {"SUI", "ch", "Suíça"},
+		            {"SVK", "sk", "Eslováquia"},
+		            {"SWE", "se", "Suécia"},
+		            {"TPE", "tw", "Taipé Chinesa"},
+		            {"TUN", "tn", "Tunísia"},
+		            {"TUR", "tr", "Turquia"},
+		            {"UAE", "ae", "Emirados Árabes Unidos"},
+		            {"UKR", "ua", "Ucrânia"},
+		            {"URU", "uy", "Uruguai"},
+		            {"USA", "us", "Estados Unidos"},
+		            {"UZB", "uz", "Uzbequistão"},
+		            {"ZIM", "zw", "Zimbábue"}
+		        }
+		    ),
+		    #"URL bandeira" = Table.AddColumn(
+		        Dados,
+		        "url_bandeira",
+		        each "https://flagcdn.com/w80/" & [codigo_iso] & ".png",
+		        type text
+		    )
+		in
+		    #"URL bandeira"
+	lineageTag: f893504c-0159-4b0d-bf08-ef5f01d7b5e7
+	queryGroup: Silver
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

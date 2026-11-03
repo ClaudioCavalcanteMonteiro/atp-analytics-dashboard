@@ -1,0 +1,138 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 387.16238887093215,
+        "y": 54.051891952760009
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1744.1878251475387,
+            "y": 397.83922021078871
+          },
+          "nodeIndex": "d_Calendario",
+          "nodeLineageTag": "132647a7-4161-4c62-8eb2-d2f71d0821d7",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 635.69027877430926,
+            "y": 119.59294998847074
+          },
+          "nodeIndex": "d_Jogadores",
+          "nodeLineageTag": "2a43beff-3884-4f13-a17c-d74a528158ce",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 643.838845352792,
+            "y": 703.00397330516125
+          },
+          "nodeIndex": "d_PerfilPartida",
+          "nodeLineageTag": "834f33ee-b873-4cc7-bdb9-17ebe7720ee7",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 642.94319968554419,
+            "y": 509.12019680757146
+          },
+          "nodeIndex": "d_Rodada",
+          "nodeLineageTag": "a2cf403d-3cb3-4c70-a98d-f7387d7e5b78",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 149.56648154729274,
+            "y": 0
+          },
+          "nodeIndex": "d_Top100",
+          "nodeLineageTag": "728ed477-0fa0-49e2-a69c-effdcfb7938d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 639.85775527303372,
+            "y": 339.57441351775208
+          },
+          "nodeIndex": "d_Torneios",
+          "nodeLineageTag": "459bb5cb-b87d-4e95-a99d-ea532ee5cf41",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1229.4609947306317,
+            "y": 227.39351608670955
+          },
+          "nodeIndex": "f_Resultados_Gold",
+          "nodeLineageTag": "11f99604-23cd-41c3-b48b-e84de3bdb849",
+          "size": {
+            "height": 538.83394118661408,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 2040.777019458526,
+            "y": 221.80846032771549
+          },
+          "nodeIndex": "**MEDIDAS**",
+          "nodeLineageTag": "a7762900-28d5-45bd-8147-b328bd097621",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2444.0775748166475,
+            "y": 387.50198665258063
+          },
+          "nodeIndex": "d_MetricaTrajetoria",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 79.553182037699841,
+      "pinKeyFieldsToTop": true,
+      "showExtraHeaderInfo": true,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

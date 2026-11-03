@@ -1,0 +1,39 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup RAW
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Gold
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup Silver
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["f_Resultados_Raw","f_Resultados_Silver","d_Paises","d_Torneios","d_Jogadores","d_Top100","d_Calendario","d_Rodada","d_PerfilPartida","f_Resultados_Gold","**MEDIDAS**"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table d_Torneios
+ref table d_Jogadores
+ref table d_Top100
+ref table d_Calendario
+ref table d_Rodada
+ref table d_PerfilPartida
+ref table f_Resultados_Gold
+ref table **MEDIDAS**
+ref table d_MetricaTrajetoria
+
+ref cultureInfo pt-BR
+

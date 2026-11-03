@@ -1,0 +1,38 @@
+table d_MetricaTrajetoria
+	lineageTag: 9669181a-653d-4c86-a2b7-7ab751d7ad72
+
+	column metrica
+		lineageTag: c28a3f8f-77e4-4d21-bef5-a4a386c0398f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [metrica]
+		sortByColumn: ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordem
+		formatString: 0
+		lineageTag: fd46cebe-b4c3-43ca-8c50-e2947194e61d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_MetricaTrajetoria = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "metrica", STRING,
+				    "ordem", INTEGER,
+				    {
+				        { "Vitórias", 1 },
+				        { "% Vitórias", 2 },
+				        { "% Pts no saque", 3 },
+				        { "Aces/partida", 4 }
+				    }
+				)
+
+	annotation PBI_Id = a0ed43967dea4c959f55d9ca441c8911
+

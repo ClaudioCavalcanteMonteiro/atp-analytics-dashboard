@@ -1,0 +1,42 @@
+table d_Torneios
+	lineageTag: 459bb5cb-b87d-4e95-a99d-ea532ee5cf41
+
+	column id_torneio
+		dataType: string
+		lineageTag: c2e75f9f-7ca5-45d0-86e5-7f02b5a1e893
+		summarizeBy: none
+		sourceColumn: id_torneio
+
+		annotation SummarizationSetBy = Automatic
+
+	column superficie
+		dataType: string
+		lineageTag: 52225cd6-a773-45fc-9733-769bea11c6bb
+		summarizeBy: none
+		sourceColumn: superficie
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_torneio
+		dataType: string
+		lineageTag: 29f1b231-2872-46f5-a060-0e295c534880
+		summarizeBy: none
+		sourceColumn: nome_torneio
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_Torneios = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				    Fonte = f_Resultados_Silver,
+				    #"Outras Colunas Removidas" = Table.SelectColumns(Fonte,{ "id_torneio","superficie", "nome_torneio"}),
+				    #"Duplicatas Removidas" = Table.Distinct(#"Outras Colunas Removidas", {"id_torneio"})
+				in
+				    #"Duplicatas Removidas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

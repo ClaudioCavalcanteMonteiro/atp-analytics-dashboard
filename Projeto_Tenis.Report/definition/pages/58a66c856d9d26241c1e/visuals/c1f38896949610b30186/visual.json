@@ -1,0 +1,508 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "c1f38896949610b30186",
+  "position": {
+    "x": 461.5270935960591,
+    "y": 178.22660098522167,
+    "z": 19000,
+    "height": 369.7536945812808,
+    "width": 844.58128078817731,
+    "tabOrder": 18000
+  },
+  "visual": {
+    "visualType": "synopticPanelByOKVIZC365478550CD4DC0A2ED985DC3E23EED",
+    "query": {
+      "queryState": {
+        "category_role": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "d_Torneios"
+                    }
+                  },
+                  "Property": "superficie"
+                }
+              },
+              "queryRef": "d_Torneios.superficie",
+              "nativeQueryRef": "superficie",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "internal": [
+        {
+          "properties": {
+            "maps": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\"maps\":{\"c3VwZXJmaWNpZQ==\":[{\"id\":\"f756bfdf-eef5-b521-8721-feb2780bde3d\",\"name\":\"quadras_synoptic\",\"location\":0,\"source\":\"quadras_synoptic.svg\",\"protection\":0,\"created\":\"2026-10-30T14:30:28.167Z\",\"updated\":\"2026-10-30T14:30:28.167Z\",\"size\":4972,\"jsvg\":{\"id\":\"f756bfdf-eef5-b521-8721-feb2780bde3d\",\"name\":\"quadras_synoptic\",\"source\":\"quadras_synoptic.svg\",\"dataMapping\":{\"areas\":{\"svg1\":{\"id\":\"svg1\"},\"polygon1\":{\"id\":\"polygon1\"},\"polygon2\":{\"id\":\"polygon2\"},\"Hard\":{\"id\":\"Hard\"},\"line1\":{\"id\":\"line1\"},\"line2\":{\"id\":\"line2\"},\"line3\":{\"id\":\"line3\"},\"line4\":{\"id\":\"line4\"},\"line5\":{\"id\":\"line5\"},\"line6\":{\"id\":\"line6\"},\"line7\":{\"id\":\"line7\"},\"line8\":{\"id\":\"line8\"},\"line9\":{\"id\":\"line9\"},\"line10\":{\"id\":\"line10\"},\"polygon3\":{\"id\":\"polygon3\"},\"polygon4\":{\"id\":\"polygon4\"},\"Clay\":{\"id\":\"Clay\"},\"line11\":{\"id\":\"line11\"},\"line12\":{\"id\":\"line12\"},\"line13\":{\"id\":\"line13\"},\"line14\":{\"id\":\"line14\"},\"line15\":{\"id\":\"line15\"},\"line16\":{\"id\":\"line16\"},\"line17\":{\"id\":\"line17\"},\"line18\":{\"id\":\"line18\"},\"line19\":{\"id\":\"line19\"},\"line20\":{\"id\":\"line20\"},\"polygon5\":{\"id\":\"polygon5\"},\"polygon6\":{\"id\":\"polygon6\"},\"Grass\":{\"id\":\"Grass\"},\"line21\":{\"id\":\"line21\"},\"line22\":{\"id\":\"line22\"},\"line23\":{\"id\":\"line23\"},\"line24\":{\"id\":\"line24\"},\"line25\":{\"id\":\"line25\"},\"line26\":{\"id\":\"line26\"},\"line27\":{\"id\":\"line27\"},\"line28\":{\"id\":\"line28\"},\"line29\":{\"id\":\"line29\"},\"line30\":{\"id\":\"line30\"}}},\"svg\":\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"600\\\" height=\\\"190\\\" viewBox=\\\"0 0 600 190\\\" id=\\\"svg1\\\" data-okviz-auto-id=\\\"true\\\">\\n<polygon points=\\\"77.0,59.6 185.1,122.0 129.0,154.4 20.9,92.0\\\" fill=\\\"#000000\\\" fill-opacity=\\\"0.07\\\" id=\\\"polygon1\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon points=\\\"74.0,53.6 182.1,116.0 126.0,148.4 17.9,86.0\\\" fill=\\\"#2E5175\\\" id=\\\"polygon2\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon id=\\\"Hard\\\" points=\\\"74.0,47.6 182.1,110.0 126.0,142.4 17.9,80.0\\\" fill=\\\"#3E6C9C\\\"/>\\n<line x1=\\\"74.0\\\" y1=\\\"54.2\\\" x2=\\\"170.7\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line1\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"29.3\\\" y1=\\\"80.0\\\" x2=\\\"126.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line2\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"68.4\\\" y1=\\\"57.4\\\" x2=\\\"165.1\\\" y2=\\\"113.3\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line3\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"34.9\\\" y1=\\\"76.7\\\" x2=\\\"131.6\\\" y2=\\\"132.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line4\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"74.0\\\" y1=\\\"54.2\\\" x2=\\\"29.3\\\" y2=\\\"80.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line5\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"170.7\\\" y1=\\\"110.0\\\" x2=\\\"126.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line6\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"90.7\\\" y1=\\\"70.3\\\" x2=\\\"57.2\\\" y2=\\\"89.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line7\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"142.8\\\" y1=\\\"100.4\\\" x2=\\\"109.3\\\" y2=\\\"119.7\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line8\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"74.0\\\" y1=\\\"80.0\\\" x2=\\\"126.0\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line9\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"125.6\\\" y1=\\\"80.2\\\" x2=\\\"74.4\\\" y2=\\\"109.8\\\" stroke=\\\"#2B2B2B\\\" stroke-opacity=\\\"0.5\\\" stroke-width=\\\"2\\\" id=\\\"line10\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon points=\\\"277.0,59.6 385.1,122.0 329.0,154.4 220.9,92.0\\\" fill=\\\"#000000\\\" fill-opacity=\\\"0.07\\\" id=\\\"polygon3\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon points=\\\"274.0,53.6 382.1,116.0 326.0,148.4 217.9,86.0\\\" fill=\\\"#904C2B\\\" id=\\\"polygon4\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon id=\\\"Clay\\\" points=\\\"274.0,47.6 382.1,110.0 326.0,142.4 217.9,80.0\\\" fill=\\\"#C0663A\\\"/>\\n<line x1=\\\"274.0\\\" y1=\\\"54.2\\\" x2=\\\"370.7\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line11\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"229.3\\\" y1=\\\"80.0\\\" x2=\\\"326.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line12\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"268.4\\\" y1=\\\"57.4\\\" x2=\\\"365.1\\\" y2=\\\"113.3\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line13\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"234.9\\\" y1=\\\"76.7\\\" x2=\\\"331.6\\\" y2=\\\"132.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line14\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"274.0\\\" y1=\\\"54.2\\\" x2=\\\"229.3\\\" y2=\\\"80.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line15\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"370.7\\\" y1=\\\"110.0\\\" x2=\\\"326.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line16\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"290.7\\\" y1=\\\"70.3\\\" x2=\\\"257.2\\\" y2=\\\"89.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line17\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"342.8\\\" y1=\\\"100.4\\\" x2=\\\"309.3\\\" y2=\\\"119.7\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line18\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"274.0\\\" y1=\\\"80.0\\\" x2=\\\"326.0\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line19\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"325.6\\\" y1=\\\"80.2\\\" x2=\\\"274.4\\\" y2=\\\"109.8\\\" stroke=\\\"#2B2B2B\\\" stroke-opacity=\\\"0.5\\\" stroke-width=\\\"2\\\" id=\\\"line20\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon points=\\\"477.0,59.6 585.1,122.0 529.0,154.4 420.9,92.0\\\" fill=\\\"#000000\\\" fill-opacity=\\\"0.07\\\" id=\\\"polygon5\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon points=\\\"474.0,53.6 582.1,116.0 526.0,148.4 417.9,86.0\\\" fill=\\\"#3A692E\\\" id=\\\"polygon6\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<polygon id=\\\"Grass\\\" points=\\\"474.0,47.6 582.1,110.0 526.0,142.4 417.9,80.0\\\" fill=\\\"#4E8C3E\\\"/>\\n<line x1=\\\"474.0\\\" y1=\\\"54.2\\\" x2=\\\"570.7\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line21\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"429.3\\\" y1=\\\"80.0\\\" x2=\\\"526.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line22\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"468.4\\\" y1=\\\"57.4\\\" x2=\\\"565.1\\\" y2=\\\"113.3\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line23\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"434.9\\\" y1=\\\"76.7\\\" x2=\\\"531.6\\\" y2=\\\"132.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line24\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"474.0\\\" y1=\\\"54.2\\\" x2=\\\"429.3\\\" y2=\\\"80.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line25\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"570.7\\\" y1=\\\"110.0\\\" x2=\\\"526.0\\\" y2=\\\"135.8\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line26\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"490.7\\\" y1=\\\"70.3\\\" x2=\\\"457.2\\\" y2=\\\"89.6\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line27\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"542.8\\\" y1=\\\"100.4\\\" x2=\\\"509.3\\\" y2=\\\"119.7\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line28\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"474.0\\\" y1=\\\"80.0\\\" x2=\\\"526.0\\\" y2=\\\"110.0\\\" stroke=\\\"#FFFFFF\\\" stroke-width=\\\"1.6\\\" id=\\\"line29\\\" data-okviz-auto-id=\\\"true\\\"/>\\n<line x1=\\\"525.6\\\" y1=\\\"80.2\\\" x2=\\\"474.4\\\" y2=\\\"109.8\\\" stroke=\\\"#2B2B2B\\\" stroke-opacity=\\\"0.5\\\" stroke-width=\\\"2\\\" id=\\\"line30\\\" data-okviz-auto-id=\\\"true\\\"/>\\n</svg>\",\"rects\":{\"svg1\":{\"x\":17.9,\"y\":47.6,\"width\":567.2,\"height\":106.8},\"polygon1\":{\"x\":20.9,\"y\":59.6,\"width\":164.2,\"height\":94.8},\"polygon2\":{\"x\":17.9,\"y\":53.6,\"width\":164.2,\"height\":94.8},\"Hard\":{\"x\":17.9,\"y\":47.6,\"width\":164.2,\"height\":94.8},\"line1\":{\"x\":74,\"y\":54.2,\"width\":96.7,\"height\":55.8},\"line2\":{\"x\":29.3,\"y\":80,\"width\":96.7,\"height\":55.8},\"line3\":{\"x\":68.4,\"y\":57.4,\"width\":96.7,\"height\":55.9},\"line4\":{\"x\":34.9,\"y\":76.7,\"width\":96.7,\"height\":55.9},\"line5\":{\"x\":29.3,\"y\":54.2,\"width\":44.7,\"height\":25.8},\"line6\":{\"x\":126,\"y\":110,\"width\":44.7,\"height\":25.8},\"line7\":{\"x\":57.2,\"y\":70.3,\"width\":33.5,\"height\":19.3},\"line8\":{\"x\":109.3,\"y\":100.4,\"width\":33.5,\"height\":19.3},\"line9\":{\"x\":74,\"y\":80,\"width\":52,\"height\":30},\"line10\":{\"x\":74.4,\"y\":80.2,\"width\":51.2,\"height\":29.6},\"polygon3\":{\"x\":220.9,\"y\":59.6,\"width\":164.2,\"height\":94.8},\"polygon4\":{\"x\":217.9,\"y\":53.6,\"width\":164.2,\"height\":94.8},\"Clay\":{\"x\":217.9,\"y\":47.6,\"width\":164.2,\"height\":94.8},\"line11\":{\"x\":274,\"y\":54.2,\"width\":96.7,\"height\":55.8},\"line12\":{\"x\":229.3,\"y\":80,\"width\":96.7,\"height\":55.8},\"line13\":{\"x\":268.4,\"y\":57.4,\"width\":96.7,\"height\":55.9},\"line14\":{\"x\":234.9,\"y\":76.7,\"width\":96.7,\"height\":55.9},\"line15\":{\"x\":229.3,\"y\":54.2,\"width\":44.7,\"height\":25.8},\"line16\":{\"x\":326,\"y\":110,\"width\":44.7,\"height\":25.8},\"line17\":{\"x\":257.2,\"y\":70.3,\"width\":33.5,\"height\":19.3},\"line18\":{\"x\":309.3,\"y\":100.4,\"width\":33.5,\"height\":19.3},\"line19\":{\"x\":274,\"y\":80,\"width\":52,\"height\":30},\"line20\":{\"x\":274.4,\"y\":80.2,\"width\":51.2,\"height\":29.6},\"polygon5\":{\"x\":420.9,\"y\":59.6,\"width\":164.2,\"height\":94.8},\"polygon6\":{\"x\":417.9,\"y\":53.6,\"width\":164.2,\"height\":94.8},\"Grass\":{\"x\":417.9,\"y\":47.6,\"width\":164.2,\"height\":94.8},\"line21\":{\"x\":474,\"y\":54.2,\"width\":96.7,\"height\":55.8},\"line22\":{\"x\":429.3,\"y\":80,\"width\":96.7,\"height\":55.8},\"line23\":{\"x\":468.4,\"y\":57.4,\"width\":96.7,\"height\":55.9},\"line24\":{\"x\":434.9,\"y\":76.7,\"width\":96.7,\"height\":55.9},\"line25\":{\"x\":429.3,\"y\":54.2,\"width\":44.7,\"height\":25.8},\"line26\":{\"x\":526,\"y\":110,\"width\":44.7,\"height\":25.8},\"line27\":{\"x\":457.2,\"y\":70.3,\"width\":33.5,\"height\":19.3},\"line28\":{\"x\":509.3,\"y\":100.4,\"width\":33.5,\"height\":19.3},\"line29\":{\"x\":474,\"y\":80,\"width\":52,\"height\":30},\"line30\":{\"x\":474.4,\"y\":80.2,\"width\":51.2,\"height\":29.6}},\"meta\":{\"created\":\"2026-10-30T14:30:28.167Z\",\"size\":4972}}}]},\"mapsOrder\":{\"c3VwZXJmaWNpZQ==\":[\"f756bfdf-eef5-b521-8721-feb2780bde3d\"]},\"selectedMaps\":{\"c3VwZXJmaWNpZQ==\":\"f756bfdf-eef5-b521-8721-feb2780bde3d\"}}'"
+                }
+              }
+            },
+            "update": {
+              "expr": {
+                "Literal": {
+                  "Value": "'1793728331955'"
+                }
+              }
+            },
+            "zoomStates": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\"f756bfdf-eef5-b521-8721-feb2780bde3d\":{\"zoom\":1,\"position\":{\"left\":0,\"top\":0}}}'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "appearance": [
+        {
+          "properties": {
+            "mapTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showPlaceholder": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "drillPath": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "attribution": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "keepAspectRatio": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "allowAnimation": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "defaultMatched": {
+              "expr": {
+                "Literal": {
+                  "Value": "'custom'"
+                }
+              }
+            },
+            "excludeSymbols": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "excludeText": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "matchedFill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Conditional": {
+                      "Cases": [
+                        {
+                          "Condition": {
+                            "Comparison": {
+                              "ComparisonKind": 0,
+                              "Left": {
+                                "Aggregation": {
+                                  "Expression": {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Entity": "d_Torneios"
+                                        }
+                                      },
+                                      "Property": "superficie"
+                                    }
+                                  },
+                                  "Function": 3
+                                }
+                              },
+                              "Right": {
+                                "Literal": {
+                                  "Value": "'Grass'"
+                                }
+                              }
+                            },
+                            "Annotations": {
+                              "PowerBI.SQExprEvaluationKind": 1,
+                              "PowerBI.SQExprTextOperatorOption": 2
+                            }
+                          },
+                          "Value": {
+                            "Literal": {
+                              "Value": "'#4E8C3E'"
+                            }
+                          }
+                        },
+                        {
+                          "Condition": {
+                            "Comparison": {
+                              "ComparisonKind": 0,
+                              "Left": {
+                                "Aggregation": {
+                                  "Expression": {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Entity": "d_Torneios"
+                                        }
+                                      },
+                                      "Property": "superficie"
+                                    }
+                                  },
+                                  "Function": 3
+                                }
+                              },
+                              "Right": {
+                                "Literal": {
+                                  "Value": "'Clay'"
+                                }
+                              }
+                            },
+                            "Annotations": {
+                              "PowerBI.SQExprEvaluationKind": 1,
+                              "PowerBI.SQExprTextOperatorOption": 2
+                            }
+                          },
+                          "Value": {
+                            "Literal": {
+                              "Value": "'#C0663A'"
+                            }
+                          }
+                        },
+                        {
+                          "Condition": {
+                            "Comparison": {
+                              "ComparisonKind": 0,
+                              "Left": {
+                                "Aggregation": {
+                                  "Expression": {
+                                    "Column": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Entity": "d_Torneios"
+                                        }
+                                      },
+                                      "Property": "superficie"
+                                    }
+                                  },
+                                  "Function": 3
+                                }
+                              },
+                              "Right": {
+                                "Literal": {
+                                  "Value": "'Hard'"
+                                }
+                              }
+                            },
+                            "Annotations": {
+                              "PowerBI.SQExprEvaluationKind": 1,
+                              "PowerBI.SQExprTextOperatorOption": 2
+                            }
+                          },
+                          "Value": {
+                            "Literal": {
+                              "Value": "'#3E6C9C'"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 0
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "tooltips": [
+        {
+          "properties": {
+            "showCategories": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showValues": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "toolbars": [
+        {
+          "properties": {
+            "showMapDropdown": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "overlap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "zoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "drill": [
+        {
+          "properties": {
+            "aggregateOnExpand": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoFetchMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'no'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "advanced": [
+        {
+          "properties": {
+            "autoPanMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "clearSelectionOnMapChange": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fillNoneToTransparent": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "allowMultiSelect": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "maxZoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "d02effdc1da89424c3da",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "d_Torneios"
+              }
+            },
+            "Property": "superficie"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}
