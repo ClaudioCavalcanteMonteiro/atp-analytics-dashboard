@@ -202,7 +202,6 @@ The page follows a Z reading pattern and the principles of *Storytelling with Da
 - **Missing statistics:** 136 played matches have no serve statistics in the source; they are left out of serve metrics through the "matches with statistics" denominator.
 - **Small samples:** splits such as left-handed opponents or deciding sets can rely on few matches; the win-loss record is always shown next to the percentage.
 - **Top 100 table is manual** and needs to be updated by hand when the ranking changes.
-- **Toby Samuel** (no. 96) has no tour-level matches in the data and does not appear in the selector.
 - **Russian and Belarusian players** compete as neutral athletes on the ATP Tour; the data still records their country codes.
 - **Synoptic Panel (free version)** works in Power BI Desktop and the Power BI Service, but *Publish to Web* requires a paid license.
 

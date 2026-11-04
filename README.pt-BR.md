@@ -202,7 +202,6 @@ A página segue a leitura em Z e os princípios do *Storytelling com Dados*: uma
 - **Estatísticas ausentes:** 136 partidas disputadas não têm estatísticas de saque na fonte; elas ficam fora das métricas de saque pelo denominador "partidas com estatística".
 - **Amostras pequenas:** recortes como adversários canhotos ou sets decisivos podem ter poucas partidas; o retrospecto de vitórias e derrotas sempre aparece ao lado do percentual.
 - **A tabela do top 100 é manual** e precisa ser atualizada à mão quando o ranking mudar.
-- **Toby Samuel** (96º) não tem partidas do circuito principal na base e não aparece no seletor.
 - **Jogadores russos e bielorrussos** competem como atletas neutros no circuito ATP; a base ainda registra o código do país.
 - **Synoptic Panel (versão gratuita)** funciona no Power BI Desktop e no Serviço do Power BI, mas a opção *Publicar na Web* exige licença paga.
 
