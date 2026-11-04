@@ -4,13 +4,7 @@
 
 Dashboard em Power BI que analisa o desempenho dos jogadores do top 100 atual da ATP, construído com arquitetura de dados em camadas (Raw → Silver → Gold), modelo em estrela e visuais personalizados em HTML e SVG gerados por DAX.
 
-![Visão geral do dashboard](docs/dashboard.png)
-
-### Demonstração
-
-Seleção de jogador, filtro por superfície e troca da métrica da trajetória:
-
-![Demonstração do dashboard](docs/demo.gif)
+![Demonstração do dashboard: seleção de jogador, filtro por superfície e troca da métrica da trajetória](docs/demo.gif)
 
 [▶ Assistir ao vídeo da demonstração (MP4)](docs/demo.mp4)
 

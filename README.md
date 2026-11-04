@@ -4,13 +4,7 @@
 
 A Power BI dashboard that analyzes the performance of the current ATP top 100, built with a layered data architecture (Raw → Silver → Gold), a star-schema model, and custom HTML and SVG visuals generated with DAX.
 
-![Dashboard overview](docs/dashboard.png)
-
-### Demo
-
-Selecting a player, filtering by surface and switching the season metric:
-
-![Dashboard demo](docs/demo.gif)
+![Dashboard demo: selecting a player, filtering by surface and switching the season metric](docs/demo.gif)
 
 [▶ Watch the demo video (MP4)](docs/demo.mp4)
 
