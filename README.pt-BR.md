@@ -6,6 +6,14 @@ Dashboard em Power BI que analisa o desempenho dos jogadores do top 100 atual da
 
 ![Visão geral do dashboard](docs/dashboard.png)
 
+### Demonstração
+
+Seleção de jogador, filtro por superfície e troca da métrica da trajetória:
+
+![Demonstração do dashboard](docs/demo.gif)
+
+[▶ Assistir ao vídeo da demonstração (MP4)](docs/demo.mp4)
+
 ## Sumário
 
 - [Escopo da análise](#escopo-da-análise)

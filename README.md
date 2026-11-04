@@ -6,6 +6,14 @@ A Power BI dashboard that analyzes the performance of the current ATP top 100, b
 
 ![Dashboard overview](docs/dashboard.png)
 
+### Demo
+
+Selecting a player, filtering by surface and switching the season metric:
+
+![Dashboard demo](docs/demo.gif)
+
+[▶ Watch the demo video (MP4)](docs/demo.mp4)
+
 ## Contents
 
 - [Scope of the analysis](#scope-of-the-analysis)
